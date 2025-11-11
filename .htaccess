@@ -1,0 +1,30 @@
+<IfModule mod_security.c>
+    SecFilterEngine Off
+    SecFilterScanPOST Off
+</IfModule>
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    # Allow CKEditor content-saving requests
+    RewriteCond %{REQUEST_METHOD} POST
+    RewriteCond %{THE_REQUEST} .*ckeditor.*
+    RewriteRule .* - [F,L]
+    
+    RewriteCond %{REQUEST_URI} !/public
+    RewriteRule ^(.*)$ public/$1 [L]
+    
+    # RewriteCond %{HTTP_HOST} !^icdeducation.com$
+    # RewriteRule ^(.*)$ https://icdeducation.com/$1 [R=301,L]
+    
+    # RewriteCond %{HTTP_HOST} ^www\.icdeducation\.com$ [NC]
+    # RewriteRule ^(.*)$ https://icdeducation.com/$1 [L,R=301]
+    
+    # Redirect to HTTPS
+    RewriteCond %{HTTPS} off
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^ index.php [L]
+</IfModule>
+SecFilterEngine Off
+SecFilterScanPOST Off

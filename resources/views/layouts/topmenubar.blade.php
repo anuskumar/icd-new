@@ -1,0 +1,675 @@
+@php
+    $topMbbsCountries = \App\Models\Country::select('countries.id', 'countries.name')
+        ->join('colleges', 'colleges.country_id', '=', 'countries.id')
+        ->join('college_course_details', 'college_course_details.college_id', '=', 'colleges.id')
+        ->join('courses', 'courses.id', '=', 'college_course_details.course_id')
+        ->where('courses.name', '=', 'MBBS (Bachelor of Medicine, Bachelor of Surgery)')
+        ->groupBy('countries.id', 'countries.name')
+        ->orderByRaw('COUNT(college_course_details.college_id) DESC')
+        ->take(5)
+        ->get();
+
+    $mbbsColleges = \App\Models\College::with('country')
+        ->whereHas('courses', function ($query) {
+            $query->where('name', 'like', '%MBBS%');
+        })
+        ->get();
+
+    $otherColleges = $mbbsColleges->filter(function ($college) use ($topMbbsCountries) {
+        return !$topMbbsCountries->contains('id', $college->country_id);
+    });
+
+    $collegesByCountry = \App\Models\College::with('country')
+        ->whereHas('courses', function ($query) {
+            $query->where('name', 'like', '%MBBS%');
+        })
+        ->get()
+        ->groupBy(fn($college) => $college->country->name);
+
+    $courses = \App\Models\Course::where('name', '!=', 'MBBS (Bachelor of Medicine, Bachelor of Surgery)')->get();
+
+    // Fetch colleges offering each course by country
+    $collegesByCourseByCountry = [];
+    foreach ($courses as $course) {
+        $collegesByCourseByCountry[$course->name] = \App\Models\College::with('country')
+            ->whereHas('courses', function ($query) use ($course) {
+                $query->where('courses.id', $course->id);
+            })
+            ->get()
+            ->groupBy(fn($college) => $college->country->name);
+    }
+
+@endphp
+
+
+
+<style>
+    .main-menu ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        position: relative;
+    }
+
+    .main-menu ul li {
+        position: relative;
+        display: inline-block;
+        margin-right: 20px;
+        border: none;
+    }
+
+    .main-menu ul li a {
+        text-decoration: none;
+        color: #333;
+        padding: 10px 10px;
+        display: block;
+        font-family: 'Arial', sans-serif;
+        transition: background-color 0.3s ease;
+    }
+
+    .main-menu ul li:hover>a {
+        background-color: #f2f2f2;
+    }
+
+    .mega-menu .dropdown-content {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        width: 650px;
+        max-height: auto;
+        flex-direction: row;
+        border: none;
+    }
+
+    .mega-menu .dropdown-content a {
+        font-size: 12px;
+    }
+
+    .mega-menu .dropdown-content .course-list a:hover {
+        text-decoration: underline #007bff;
+        color: #007bff;
+    }
+
+
+    .mega-menu:hover .dropdown-content {
+        display: flex;
+    }
+
+    .mega-menu .column-left {
+        width: 50%;
+    }
+
+    .mega-menu .column-right {
+        background: #f2f2f2;
+        width: 100%;
+        padding-left: 10px;
+    }
+
+    /* Country links */
+    .mega-menu .column-left ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        border: none;
+    }
+
+    .mega-menu .column-left ul li {
+        margin-bottom: 5px;
+        margin-left: 10px;
+        border: none;
+    }
+
+    .mega-menu .column-right ul li {
+        border: none;
+    }
+
+    .mega-menu .column-left ul li a {
+        color: #333;
+        text-decoration: none;
+        transition: color 0.3s ease;
+        padding: 10px;
+    }
+
+    .mega-menu .column-right ul li a {
+        padding: 10px;
+        border: none;
+    }
+
+    .mega-menu .column-left ul li a:hover {
+        color: #007bff;
+    }
+
+    /* Course lists initially hidden */
+    .mega-menu .column-right .course-list {
+        display: none;
+    }
+
+    .mega-menu .column-right .course-list.active {
+        display: block;
+    }
+
+    .mega-menu .column-right .course-list ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        border: none;
+    }
+
+    .mega-menu .column-right .course-list ul li a {
+        color: #333;
+        text-decoration: none;
+        border: none;
+    }
+
+    /* Responsive styles */
+    @media (max-width: 768px) {
+        .mega-menu .dropdown-content {
+            width: 100%;
+            position: static;
+            box-shadow: none;
+            padding: 5px 0;
+            display: block;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .mega-menu .column-left,
+        .mega-menu .column-right {
+            width: 100%;
+        }
+
+        .mega-menu .column-left ul li {
+            margin-bottom: 5px;
+        }
+
+        .mega-menu .column-left ul li a,
+        .mega-menu .column-right .course-list ul li a {
+            font-size: 14px;
+        }
+    }
+
+    /* Add these styles */
+    .mobile-menu-toggle {
+        cursor: pointer;
+        padding: 3px;
+        position: absolute;
+        right: 15px;
+        top: 8px;
+    }
+
+    .mobile-menu-toggle span {
+        display: block;
+        width: 25px;
+        height: 3px;
+        background: #333;
+        margin: 5px 0;
+        transition: 0.3s;
+    }
+
+    .mobile-nav {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        background: #fff;
+        padding: 15px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .mobile-nav.active {
+        display: block;
+    }
+
+    .mobile-nav ul {
+        list-style: none;
+        padding-left: 0;
+        margin: 0;
+    }
+
+    .mobile-nav li {
+        position: relative;
+        margin-bottom: 10px;
+    }
+
+    .mobile-nav li a {
+        padding: 10px 0;
+        display: block;
+        color: #333;
+        text-decoration: none;
+    }
+
+    .mobile-nav .submenu-toggle {
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        padding: 0 15px;
+        cursor: pointer;
+    }
+
+    .mobile-nav .submenu {
+        display: none;
+        padding-left: 15px;
+    }
+
+    .mobile-nav .submenu.active {
+        display: block;
+    }
+
+    .mobile-nav .has-submenu.open>a {
+        color: #007bff;
+    }
+
+    .social-icon {
+        width: 32px;
+        height: 32px;
+        object-fit: cover;
+    }
+
+    .youtube {
+        width: 39px;
+    }
+
+    /* Hide desktop menu on mobile */
+    @media (max-width: 768px) {
+        .main-menu {
+            display: none;
+        }
+    }
+</style>
+
+
+<!-- header -->
+<header class="header-area header-three">
+    <div class="header-top second-header d-none d-md-block">
+        <div class="container">
+            <div class="row align-items-center">
+
+                <div class="col-lg-8 col-md-8 d-none d-lg-block ">
+                    <div class="header-social">
+                        <span>
+                            Talk to Admission Team : 0471 4061700
+                        </span>
+                        <!--  /social media icon redux -->
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-2 text-right">
+                    <div class="header-cta">
+                        <ul class="list-unstyled mb-0">
+                            <li>
+                                <div class="header-social d-flex justify-content-end gap-1">
+                                    <img src="{{ asset('assets/img/icon/facebook.png') }}" alt="img"
+                                        class="social-icon">
+                                    <img src="{{ asset('assets/img/icon/instagram.png') }}" alt="img"
+                                        class="social-icon">
+                                    <img src="{{ asset('assets/img/icon/youtube.png') }}"
+                                        alt="img"class="social-icon youtube">
+                                    <!--  /social media icon redux -->
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div id="header-sticky" class="menu-area">
+        <div class="container">
+            <div class="second-menu">
+                <div class="row align-items-center d-flex">
+                    <div class="col-lg-3">
+                        <div class="logo">
+                            <a href="{{ route('home') }}"><img style="max-width:100%; height:auto;"
+                                    src="{{ asset('assets/img/logo/logo.webp') }}" alt="logo"></a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3">
+                        <div class="main-menu text-left text-xl-left">
+                            <nav id="mobile-menu">
+                                <ul>
+                                    <li class="has-sub mega-menu">
+                                        <a href="#">MBBS</a>
+                                        <div class="dropdown-content">
+                                            <div class="column-left">
+                                                <ul>
+                                                    @foreach ($topMbbsCountries as $country)
+                                                        <li class="has-sub">
+                                                            <a href="#"
+                                                                data-target="{{ strtolower(str_replace(' ', '-', $country->name)) }}-courses">
+                                                                STUDY IN
+                                                                {{ $country->name }}
+                                                            </a>
+                                                        </li>
+                                                    @endforeach
+                                                    <li class="has-sub">
+                                                        <a href="#" data-target="more-countries">MORE UNIVERSITIES
+                                                            <i class="fa fa-arrow-right"></i></a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="column-right">
+                                                @foreach ($collegesByCountry as $countryName => $colleges)
+                                                    @php
+                                                        $limitedColleges = $colleges->take(5);
+                                                        $hasMoreColleges = $colleges->count() > 5;
+                                                    @endphp
+
+                                                    <div class="course-list"
+                                                        id="{{ strtolower(str_replace(' ', '-', $countryName)) }}-courses">
+                                                        <ul>
+                                                            @foreach ($limitedColleges as $college)
+                                                                <li>
+                                                                    <a
+                                                                        href="{{ route('college.show', ['id' => base64_encode($college->id), 'name' => Str::slug($college->name)]) }}">
+                                                                        MBBS in {{ $college->name }}
+                                                                    </a>
+                                                                </li>
+                                                            @endforeach
+
+                                                            @if ($hasMoreColleges)
+                                                                <li>
+                                                                    <a
+                                                                        href="{{ route('listing.colleges', ['countryId' =>base64_encode(@$colleges->first()->country->id)]) }}">
+                                                                        More Colleges in {{ $countryName }}
+
+                                                                    </a>
+                                                                </li>
+                                                            @endif
+                                                        </ul>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="has-sub mega-menu">
+                                        <a href="#">Courses</a>
+                                        <div class="dropdown-content">
+                                            <div class="column-left">
+                                                <ul>
+                                                    @foreach ($courses as $course)
+                                                        <li class="has-sub">
+                                                            <a href="#"
+                                                                data-target="{{ strtolower(str_replace(' ', '-', $course->name)) }}-countries">
+                                                                {{ $course->name }}
+                                                            </a>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                            <div class="column-right">
+                                                @foreach ($collegesByCourseByCountry as $courseName => $collegesByCountry)
+                                                    <div class="course-list"
+                                                        id="{{ strtolower(str_replace(' ', '-', $courseName)) }}-countries">
+                                                        @foreach ($collegesByCountry as $countryName => $colleges)
+                                                            <ul>
+                                                                @foreach ($colleges as $college)
+                                                                    <li>
+                                                                        <a
+                                                                            href="{{ route('listing.colleges', ['countryId' => base64_encode($college->country_id)]) }}">
+                                                                            TOP COLLEGES IN
+                                                                            {{ $countryName }}
+                                                                        </a>
+                                                                    </li>
+                                                                @endforeach
+                                                            </ul>
+                                                        @endforeach
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+
+
+                    <div class=" col-lg-1 text-right d-none d-lg-block text-right text-xl-right">
+                        <div class="login">
+                            <ul>
+                                <li>
+                                    <div class="second-header-btn">
+                                        <a href="#" class="btn tst">LANGUAGE TEST SERIES</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class=" col-lg-2 text-right d-none d-lg-block text-right text-xl-right">
+                        <div class="login">
+                            <ul>
+                                <li>
+                                    <div class="second-header-btn">
+                                        <a href="#" class="btn neet">NEET COACHING</a>
+                                    </div>
+
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class=" col-lg-3 text-right d-none d-lg-block text-right text-xl-right">&nbsp;&nbsp;
+                        @auth
+                            <div class="dropdown">
+                                <a class="dropdown-toggle" id="userDropdown" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
+                                    {{ Auth::user()->name }}
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                                    @if (Auth::user()->user_type == 'A')
+                                        <li style="padding-left:30px; "><a
+                                                href="{{ route('admin_panel.dashboard') }}">Dashboard</a></li>
+                                        <li style="padding-left:30px;"><a href="{{ route('logout') }}">Logout</a></li>
+                                    @endif
+                                    @if (Auth::user()->user_type == 'S')
+                                        <li style="padding-left:30px; "><a
+                                                href="{{ route('student_panel.student_dashboard') }}">Dashboard</a></li>
+                                        <li style="padding-left:30px;"><a href="{{ route('logout') }}">Logout</a></li>
+                                    @endif
+                                    @if (Auth::user()->user_type == 'staff')
+                                        <li style="padding-left:30px; "><a
+                                                href="{{ route('admin_panel.dashboard') }}">Dashboard</a></li>
+                                        <li style="padding-left:30px;"><a href="{{ route('logout') }}">Logout</a></li>
+                                    @endif
+                                    @if (Auth::user()->user_type == 'sub_agent')
+                                        <li style="padding-left:30px; "><a
+                                                href="{{ route('admin_panel.dashboard') }}">Dashboard</a></li>
+                                        <li style="padding-left:30px;"><a href="{{ route('logout') }}">Logout</a></li>
+                                    @endif
+                                </ul>
+                            </div>
+                        @else
+                            <a data-toggle="modal" data-target="#registerModal">
+                                Sign Up
+                            </a>
+                            |
+                            <a href="{{ route('admin_panel.showLoginForm') }}">
+                                Login
+                            </a>
+                        @endauth
+                    </div>
+
+                    <div class="col-12">
+                        <div class="mobile-menu-toggle d-lg-none">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                    <div class="mobile-nav">
+                        <ul>
+                            <!-- MBBS Section -->
+                            <li class="has-submenu">
+                                <a href="javascript:void(0)">MBBS <span class="submenu-toggle">›</span></a>
+                                <ul class="submenu">
+                                    @foreach ($topMbbsCountries as $country)
+                                        <li>
+                                            <a href="{{ route('listing.colleges', ['countryId' => $country->id]) }}">
+                                                Study in {{ $country->name }}
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </li>
+                            <!-- Courses Section -->
+                            <li class="has-submenu">
+                                <a href="javascript:void(0)">Courses <span class="submenu-toggle">›</span></a>
+                                <ul class="submenu">
+                                    @foreach ($courses as $course)
+                                        <li class="has-submenu">
+                                            <a href="javascript:void(0)">{{ $course->name }} <span
+                                                    class="submenu-toggle">›</span></a>
+                                            <ul class="submenu">
+                                                @foreach ($collegesByCourseByCountry[$course->name] ?? [] as $countryName => $colleges)
+                                                    <li>
+                                                        <a
+                                                            href="{{ route('listing.colleges', ['countryId' => base64_encode($colleges[0]->country_id)]) }}">
+                                                            TOP COLLEGES IN {{ $countryName }}
+                                                        </a>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </li>
+
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- Mobile Navigation -->
+<style>
+    .phone-link {
+      position: relative;
+      margin-left: 15px;
+      font-size: 22px;
+      text-decoration: none;
+      color: #333;
+    }
+    .phone-link span {
+        position: absolute;
+    top: -1px;
+    right: 32px;
+    /* background: red; */
+    color: #fff;
+    /* border-radius: 50%; */
+    font-size: 12px;
+
+    }
+    </style>
+<!-- header-end -->
+<div class="sidenav">
+    <a href="https://wa.me/919400306111" onclick="return false;"><i class="fab fa-whatsapp"></i></i></a>
+    {{-- <a href="#" onclick="return false;"><i class="fa fa-calendar"></i></a> --}}
+    <a href="mailto:icdgroupkera@gmail.com" onclick="return false;"><i class="fa fa-envelope"></i></a>
+    <!-- Landline -->
+    <a href="tel:04714061700" class="phone-link" title="Phone 1">
+        <i class="fa fa-phone"></i><span>1</span>
+      </a>
+
+      <!-- Phone 2 -->
+      <a href="tel:04844061700" class="phone-link" title="Phone 2">
+        <i class="fa fa-phone"></i><span>2</span>
+      </a>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // User Dropdown Toggle
+        var dropdownToggle = document.getElementById('userDropdown');
+        var dropdownMenu = document.querySelector('.dropdown-menu');
+
+        if (dropdownToggle && dropdownMenu) {
+            dropdownToggle.addEventListener('click', function(event) {
+                event.stopPropagation(); // Prevents the click from closing immediately
+                dropdownMenu.classList.toggle('show');
+            });
+
+            window.addEventListener('click', function(event) {
+                if (!dropdownToggle.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                    dropdownMenu.classList.remove('show');
+                }
+            });
+        }
+
+        // Mega Menu Hover & Click for MBBS and Courses
+        const countryLinks = document.querySelectorAll('.mega-menu .column-left ul li a');
+        const courseLists = document.querySelectorAll('.mega-menu .column-right .course-list');
+
+        if (courseLists.length > 0) {
+            courseLists[0].classList.add('active');
+        }
+
+        countryLinks.forEach(link => {
+            const targetId = link.getAttribute('data-target');
+
+            link.addEventListener('mouseover', function() {
+                showCourseList(targetId);
+            });
+        });
+
+        function showCourseList(targetId) {
+            courseLists.forEach(list => {
+                list.classList.toggle('active', list.id === targetId);
+            });
+        }
+
+        // Mobile Menu Toggle
+        const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+        const mobileNav = document.querySelector('.mobile-nav');
+
+        if (mobileMenuToggle) {
+            mobileMenuToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                mobileNav.classList.toggle('active');
+            });
+        }
+
+        // Mobile Submenu Toggle
+        document.querySelectorAll('.has-submenu > a').forEach(item => {
+            item.addEventListener('click', function(e) {
+                const submenu = this.nextElementSibling; // Get the submenu
+
+                if (submenu && submenu.classList.contains('submenu')) {
+                    // Prevent default only if submenu exists
+                    e.preventDefault();
+                    submenu.classList.toggle('active');
+                    item.parentElement.classList.toggle('open');
+                }
+            });
+        });
+
+        //Allow redirection for final links
+        document.querySelectorAll('.submenu a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                // Ensure it's a final link (without submenu)
+                if (!this.nextElementSibling || !this.nextElementSibling.classList.contains(
+                        'submenu')) {
+                    window.location.href = this.getAttribute('href');
+                }
+            });
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!mobileNav.contains(e.target) && !mobileMenuToggle.contains(e.target)) {
+                mobileNav.classList.remove('active');
+            }
+        });
+    });
+</script>
