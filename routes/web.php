@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdmissionController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CollegeController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\HomeController;
@@ -40,6 +41,8 @@ Route::get('/', [HomeController::class, 'home'])->name('home');
 Route::get('/college-details/{id?}', [HomeController::class, 'collegeDetails'])->name('website.college-details');
 Route::get('/course-details/{id?}', [HomeController::class, 'courseDetails'])->name('website.course-details');
 Route::get('/exam-details/{id?}', [HomeController::class, 'examDetails'])->name('website.exam-details');
+Route::get('/contact-us', [ContactController::class, 'showContactForm'])->name('contact.show');
+Route::post('/contact-us', [ContactController::class, 'submitContactForm'])->name('contact.submit');
 
 
 // Route::get('/studentlist', [StudentController::class, 'studentlist'])->name('admin_panel.studentlist');

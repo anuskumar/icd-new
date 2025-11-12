@@ -24,7 +24,7 @@
 
                                     <div
                                         class="slider-btn mt-30 d-flex flex-wrap align-items-center justify-content-center gap-3">
-                                        <a href="{{ route('admin_panel.signup') }}"
+                                        <a href="{{ route('contact.show') }}"
                                             class="btn ss-btn mr-15 d-flex align-items-center justify-content-center"
                                             style="border-radius: 26px; background: #0E4389; border: 1px solid white; font-size: 14px; padding: 12px 20px;"
                                             data-animation="fadeInLeft" data-delay=".1s">
@@ -1540,9 +1540,9 @@
                         <div>
                             <img src="{{ asset('assets/img/brand/2.png') }}" alt="img">
                             <h4 style="text-align: center;">
-                                <u>Trivandrum -
+                                <p>Trivandrum -
                                     ICD, Housing Board Junction, Thampanoor, Thiruvananthapuram
-                                </u>
+                                </p>
                             </h4>
                         </div>
                     </div>
@@ -1550,11 +1550,15 @@
                         <div>
                             <img src="{{ asset('assets/img/brand/3.png') }}" alt="img">
                             <h4 style="text-align: center;">
-                                <u>Kochi-
+                                <p>Kochi-
                                     ICD Overseas Education - <br />
-                                    094003 06111
-                                    https://g.co/kgs/f9WiH4y
-                                </u>
+                                    DD Corner Stone
+                                    Sahodaran Ayyappan Rd,
+                                    Giringar Housing Colony,
+                                    Kadavanthra,682020
+                                    Ph: <a href="tel:09400306111">09400306111</a>
+
+                                </p>
                             </h4>
                         </div>
                     </div>
@@ -1562,10 +1566,11 @@
                         <div>
                             <img src="{{ asset('assets/img/brand/4.png') }}" alt="img">
                             <h4 style="text-align: center;">
-                                <u>Ernakulam-
-                                    ICD, DD Corner Stone Building, Kadavanthra, Ernakulam, Kerala
-                                    0484 4061700
-                                </u>
+                                <p>Ernakulam-
+                                    ICD, DD Corner Stone Building, Kadavanthra, Ernakulam,
+                                     Kerala
+                                    Ph: <a href="tel:0484 4061700">0484 4061700</a>
+                                </p>
                             </h4>
                         </div>
                     </div>
@@ -1573,10 +1578,10 @@
                         <div>
                             <img src="{{ asset('assets/img/brand/1.png') }}" alt="img">
                             <h4 style="text-align: center;">
-                                <u>Delhi-
+                                <p>Delhi-
                                     D - 35, 2nd Floor, Acharya Niketan, Mayur Vihar Phase I, Delhi - 110091 <br />
-                                    Ph: 011 43095958
-                                </u>
+                                    Ph:  <a href="tel:011 43095958">01143095958</a>
+                                </p>
                             </h4>
                         </div>
                     </div>

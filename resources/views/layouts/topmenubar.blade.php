@@ -304,13 +304,16 @@
                     <div class="header-cta">
                         <ul class="list-unstyled mb-0">
                             <li>
-                                <div class="header-social d-flex justify-content-end gap-1">
-                                    <img src="{{ asset('assets/img/icon/facebook.png') }}" alt="img"
-                                        class="social-icon">
+                                <div class="header-social d-flex justify-content-end">
+                                   <a href="https://www.facebook.com/allindia.nursesassociation.9" target="_blank" > <img src="{{ asset('assets/img/icon/facebook.png') }}" alt="img"
+                                        class="social-icon"></a>
+
+                                    <a href="https://www.instagram.com/icd_india/" target="_blank" >
                                     <img src="{{ asset('assets/img/icon/instagram.png') }}" alt="img"
-                                        class="social-icon">
+                                        class="social-icon"></a>
+                                        <a href="https://www.youtube.com/@ICDOverseasEducation" target="_blank" >
                                     <img src="{{ asset('assets/img/icon/youtube.png') }}"
-                                        alt="img"class="social-icon youtube">
+                                        alt="img"class="social-icon youtube"></a>
                                     <!--  /social media icon redux -->
                                 </div>
                             </li>
@@ -427,6 +430,7 @@
                                             </div>
                                         </div>
                                     </li>
+                                    <li><a href="{{ route('contact.show') }}">Contact Us</a></li>
                                 </ul>
                             </nav>
                         </div>
@@ -543,6 +547,7 @@
                                     @endforeach
                                 </ul>
                             </li>
+                            <li><a href="{{ route('contact.show') }}">Contact Us</a></li>
 
                         </ul>
                     </div>
@@ -574,9 +579,9 @@
     </style>
 <!-- header-end -->
 <div class="sidenav">
-    <a href="https://wa.me/919400306111" onclick="return false;"><i class="fab fa-whatsapp"></i></i></a>
+    <a href="https://wa.me/919400306111" target="_blank"><i class="fab fa-whatsapp"></i></i></a>
     {{-- <a href="#" onclick="return false;"><i class="fa fa-calendar"></i></a> --}}
-    <a href="mailto:icdgroupkera@gmail.com" onclick="return false;"><i class="fa fa-envelope"></i></a>
+    <a href="mailto:icdgroupkera@gmail.com" target="_blank"><i class="fa fa-envelope"></i></a>
     <!-- Landline -->
     <a href="tel:04714061700" class="phone-link" title="Phone 1">
         <i class="fa fa-phone"></i><span>1</span>
