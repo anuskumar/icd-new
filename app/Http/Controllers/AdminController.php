@@ -7,6 +7,10 @@ use App\Models\User;
 use App\Models\Student;
 use App\Models\Qualification;
 use App\Models\StudentFile;
+use App\Models\EnrollmentModel;
+use App\Models\College;
+use App\Models\Course;
+use App\Models\Exam;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
@@ -19,8 +23,116 @@ class AdminController extends Controller
 {
     public function dashboard()
     {
+        // Total Students
+        $totalStudents = Student::count();
         
-        return view('admin_panel.dashboard');
+        // Total Enrollments
+        $totalEnrollments = EnrollmentModel::count();
+        $pendingEnrollments = EnrollmentModel::where(function($query) {
+            $query->where('status', 'pending')
+                  ->orWhereNull('status');
+        })->count();
+        $verifiedEnrollments = EnrollmentModel::where('status', 'verified')->count();
+        $completedEnrollments = EnrollmentModel::where('status', 'completed')->count();
+        $rejectedEnrollments = EnrollmentModel::where('status', 'rejected')->count();
+        
+        // Pending Document Approvals (enrollments with messages but not confirmed)
+        $pendingDocumentApprovals = EnrollmentModel::whereNotNull('message')
+            ->where(function($query) {
+                $query->where('file_upload_status', '!=', 'confirmed')
+                      ->orWhereNull('file_upload_status');
+            })
+            ->count();
+        
+        // Total Colleges and Courses
+        $totalColleges = College::count();
+        $totalCourses = Course::count();
+        $totalExams = Exam::count();
+        
+        // Total Users (excluding admin and students)
+        $totalUsers = User::whereNotIn('user_type', ['A', 'S'])->count();
+        
+        // Recent Enrollments (last 10)
+        $recentEnrollments = EnrollmentModel::with('college', 'course', 'user', 'student')
+            ->orderBy('created_at', 'desc')
+            ->limit(10)
+            ->get();
+        
+        // Recent Activity (recent enrollments and document uploads)
+        $recentActivity = collect();
+        
+        try {
+            // Get recent enrollments for activity log
+            $recentEnrollmentsForActivity = EnrollmentModel::with('college', 'course', 'user')
+                ->orderBy('created_at', 'desc')
+                ->limit(5)
+                ->get()
+                ->map(function($enrollment) {
+                    return [
+                        'type' => 'enrollment',
+                        'message' => 'New enrollment: ' . ($enrollment->user->name ?? 'N/A') . ' enrolled in ' . ($enrollment->course->name ?? 'N/A'),
+                        'date' => $enrollment->created_at,
+                        'icon' => 'file-text'
+                    ];
+                });
+            
+            // Get recent document uploads
+            $recentDocuments = StudentFile::with('student', 'qualification')
+                ->orderBy('created_at', 'desc')
+                ->limit(5)
+                ->get()
+                ->map(function($file) {
+                    return [
+                        'type' => 'document',
+                        'message' => 'Document uploaded: ' . ($file->student->first_name ?? '') . ' ' . ($file->student->last_name ?? '') . ' - ' . ($file->qualification->name ?? 'N/A'),
+                        'date' => $file->created_at,
+                        'icon' => 'upload'
+                    ];
+                });
+            
+            $recentActivity = $recentEnrollmentsForActivity->merge($recentDocuments)
+                ->sortByDesc(function($item) {
+                    return $item['date']->timestamp;
+                })
+                ->take(5)
+                ->values();
+        } catch (\Exception $e) {
+            Log::error('Error loading recent activity: ' . $e->getMessage());
+            $recentActivity = collect();
+        }
+        
+        // Enrollment trends (last 6 months)
+        $enrollmentTrends = [];
+        for ($i = 5; $i >= 0; $i--) {
+            $date = now()->subMonths($i);
+            $monthName = $date->format('M Y');
+            $count = EnrollmentModel::whereYear('created_at', $date->year)
+                ->whereMonth('created_at', $date->month)
+                ->count();
+            $enrollmentTrends[] = [
+                'month' => $monthName,
+                'count' => $count
+            ];
+        }
+        
+        $page_data = [
+            'totalStudents' => $totalStudents,
+            'totalEnrollments' => $totalEnrollments,
+            'pendingEnrollments' => $pendingEnrollments,
+            'verifiedEnrollments' => $verifiedEnrollments,
+            'completedEnrollments' => $completedEnrollments,
+            'rejectedEnrollments' => $rejectedEnrollments,
+            'pendingDocumentApprovals' => $pendingDocumentApprovals,
+            'totalColleges' => $totalColleges,
+            'totalCourses' => $totalCourses,
+            'totalExams' => $totalExams,
+            'totalUsers' => $totalUsers,
+            'recentEnrollments' => $recentEnrollments,
+            'recentActivity' => $recentActivity,
+            'enrollmentTrends' => $enrollmentTrends,
+        ];
+        
+        return view('admin_panel.dashboard', $page_data);
     }
 
     public function userlist()
@@ -134,8 +246,16 @@ class AdminController extends Controller
         $students = Student::all();
         $certificates = collect();
 
+        // Check if this is an AJAX request - check multiple conditions for better compatibility
+        $acceptHeader = $request->header('Accept', '');
+        $isAjax = $request->ajax() || 
+                  $request->wantsJson() || 
+                  $request->header('X-Requested-With') === 'XMLHttpRequest' ||
+                  $request->header('Accept') === 'application/json' ||
+                  strpos($acceptHeader, 'application/json') !== false;
+
         // If AJAX call with 'student_id', fetch certificates
-        if ($request->ajax() && $request->has('student_id')) {
+        if ($isAjax && $request->has('student_id')) {
             $request->validate([
                 'student_id' => 'required|exists:students,id',
             ]);
