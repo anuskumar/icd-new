@@ -24,23 +24,55 @@ class ExamController extends Controller
         ->addIndexColumn()
 
         ->editColumn('s_paper', function($d) {
-            $url = asset('storage/' . $d->s_paper);
             $pdf_icon = asset('admin_assets/assets/img/icons/pdf.svg');
-            // $editIcon = '<i class="fe fe-edit" data-bs-toggle="tooltip" title="Edit"></i>';
-
-            $details = '<a class="me-3" href="' . $url . '" target="_blank"><img src="' . $pdf_icon . '" alt="pdf-icon"></a>';
-            // $details .= '<a href="javascript:void(0);" class="me-3 edit-brochure" data-toggle="modal" data-target="#editBrochureModal" data-college-id="' . $d->id . '">' . $editIcon . '</a>';
+            
+            if ($d->s_paper) {
+                // Check if file exists in storage
+                $fileExists = Storage::disk('public')->exists($d->s_paper);
+                
+                if ($fileExists) {
+                    $url = asset('storage/' . $d->s_paper);
+                    $details = '<a class="me-3" href="' . $url . '" target="_blank"><img src="' . $pdf_icon . '" alt="pdf-icon"></a>';
+                } else {
+                    // Try direct path if storage link check fails
+                    $directPath = public_path('storage/' . $d->s_paper);
+                    if (file_exists($directPath)) {
+                        $url = asset('storage/' . $d->s_paper);
+                        $details = '<a class="me-3" href="' . $url . '" target="_blank"><img src="' . $pdf_icon . '" alt="pdf-icon"></a>';
+                    } else {
+                        $details = '<span class="text-muted">N/A</span>';
+                    }
+                }
+            } else {
+                $details = '<span class="text-muted">N/A</span>';
+            }
 
             return $details;
         })
 
         ->editColumn('guide', function($d) {
-            $url = asset('storage/' . $d->guide);
             $pdf_icon = asset('admin_assets/assets/img/icons/pdf.svg');
-            // $editIcon = '<i class="fe fe-edit" data-bs-toggle="tooltip" title="Edit"></i>';
-
-            $details = '<a class="me-3" href="' . $url . '" target="_blank"><img src="' . $pdf_icon . '" alt="pdf-icon"></a>';
-            // $details .= '<a href="javascript:void(0);" class="me-3 edit-brochure" data-toggle="modal" data-target="#editBrochureModal" data-college-id="' . $d->id . '">' . $editIcon . '</a>';
+            
+            if ($d->guide) {
+                // Check if file exists in storage
+                $fileExists = Storage::disk('public')->exists($d->guide);
+                
+                if ($fileExists) {
+                    $url = asset('storage/' . $d->guide);
+                    $details = '<a class="me-3" href="' . $url . '" target="_blank"><img src="' . $pdf_icon . '" alt="pdf-icon"></a>';
+                } else {
+                    // Try direct path if storage link check fails
+                    $directPath = public_path('storage/' . $d->guide);
+                    if (file_exists($directPath)) {
+                        $url = asset('storage/' . $d->guide);
+                        $details = '<a class="me-3" href="' . $url . '" target="_blank"><img src="' . $pdf_icon . '" alt="pdf-icon"></a>';
+                    } else {
+                        $details = '<span class="text-muted">N/A</span>';
+                    }
+                }
+            } else {
+                $details = '<span class="text-muted">N/A</span>';
+            }
 
             return $details;
         })
