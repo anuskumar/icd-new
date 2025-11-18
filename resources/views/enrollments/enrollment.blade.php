@@ -178,37 +178,77 @@
 
 @section('contentjs')
     <script>
+        // Reset form when modal is opened
+        $('#requestModal').on('show.bs.modal', function() {
+            $('#requestForm')[0].reset();
+            $('#requestMessage').val('');
+            $('#enrollmentId').val('');
+            // Re-enable the submit button
+            $('#requestForm .btn-primary').prop('disabled', false).text('Send Request');
+        });
+
+        // Reset form when modal is hidden
+        $('#requestModal').on('hidden.bs.modal', function() {
+            $('#requestForm')[0].reset();
+            $('#requestMessage').val('');
+            $('#enrollmentId').val('');
+            // Re-enable the submit button
+            $('#requestForm .btn-primary').prop('disabled', false).text('Send Request');
+        });
+
         // Handle the request button click to show the modal
-        $('.request-btn').click(function() {
+        $(document).on('click', '.request-btn', function() {
             let selectedEnrollmentId = $(this).data('id');
             $('#enrollmentId').val(selectedEnrollmentId);
+            // Reset form when opening modal
+            $('#requestForm')[0].reset();
+            $('#requestMessage').val('');
+            $('#requestForm .btn-primary').prop('disabled', false).text('Send Request');
         });
 
         // AJAX submission for sending request
         $('#requestForm').submit(function(e) {
             e.preventDefault();
             let formData = $(this).serialize();
+            let enrollmentId = $('#enrollmentId').val(); // Store enrollmentId before hiding modal
             let $sendRequestButton = $('#requestForm .btn-primary'); // Select the send request button
+            let $modal = $('#requestModal');
 
-            // Disable the button
-            $sendRequestButton.prop('disabled', true).text('Sending...');
+            // Hide modal immediately
+            $modal.modal('hide');
+            
+            // Force hide if Bootstrap modal doesn't work
+            setTimeout(function() {
+                $modal.removeClass('show');
+                $modal.css('display', 'none');
+                $('body').removeClass('modal-open');
+                $('.modal-backdrop').remove();
+            }, 100);
+            
+            // Reset form
+            $('#requestForm')[0].reset();
+            $('#requestMessage').val('');
+            
+            // Re-enable the submit button for next use
+            $sendRequestButton.prop('disabled', false).text('Send Request');
 
             $.ajax({
                 type: 'POST',
                 url: '{{ route('enrollment.sendRequest') }}',
                 data: formData,
                 success: function(response) {
-                    $('#requestModal').modal('hide');
+                    // Show success message
                     toastr.success('Request sent successfully!');
-                    let enrollmentId = $('#enrollmentId').val();
+                    
+                    // Update the button in the table
                     $('#enrollment-row-' + enrollmentId + ' .request-btn')
+                        .removeClass('btn-danger request-btn')
+                        .addClass('btn-secondary')
                         .attr('disabled', true)
                         .text('Requested');
                 },
                 error: function(xhr) {
-                    toastr.error('Error: ' + xhr.responseJSON.message);
-                    // Re-enable the button if there's an error
-                    $sendRequestButton.prop('disabled', false).text('Send Request');
+                    toastr.error('Error: ' + (xhr.responseJSON?.message || 'An error occurred'));
                 }
             });
         });
