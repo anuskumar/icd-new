@@ -13,6 +13,7 @@ use App\Models\StudentEducation;
 use App\Models\Qualification;
 use App\Models\User;
 use App\Models\StudentFile;
+use App\Models\EnrollmentModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -26,7 +27,57 @@ class StudentController extends Controller
 {
     public function sdashboard()
     {
-        return view('student_panel.student_dashboard');
+        $user = Auth::user();
+        $student = $user->student;
+        
+        // Get enrollment statistics
+        $totalEnrollments = EnrollmentModel::where('user_id', $user->id)->count();
+        $pendingEnrollments = EnrollmentModel::where('user_id', $user->id)
+            ->where(function($query) {
+                $query->where('status', 'pending')
+                      ->orWhereNull('status');
+            })
+            ->count();
+        $underReviewEnrollments = EnrollmentModel::where('user_id', $user->id)
+            ->where('status', 'under_review')
+            ->count();
+        $verifiedEnrollments = EnrollmentModel::where('user_id', $user->id)
+            ->where('status', 'verified')
+            ->count();
+        $completedEnrollments = EnrollmentModel::where('user_id', $user->id)
+            ->where('status', 'completed')
+            ->count();
+        $rejectedEnrollments = EnrollmentModel::where('user_id', $user->id)
+            ->where('status', 'rejected')
+            ->count();
+        
+        // Get recent enrollments (last 5)
+        $recentEnrollments = EnrollmentModel::where('user_id', $user->id)
+            ->with('college', 'course')
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get();
+        
+        // Get total certificates uploaded
+        $totalCertificates = 0;
+        if ($student) {
+            $totalCertificates = StudentFile::where('student_id', $student->id)->count();
+        }
+        
+        $page_data = [
+            'student' => $student,
+            'user' => $user,
+            'totalEnrollments' => $totalEnrollments,
+            'pendingEnrollments' => $pendingEnrollments,
+            'underReviewEnrollments' => $underReviewEnrollments,
+            'verifiedEnrollments' => $verifiedEnrollments,
+            'completedEnrollments' => $completedEnrollments,
+            'rejectedEnrollments' => $rejectedEnrollments,
+            'recentEnrollments' => $recentEnrollments,
+            'totalCertificates' => $totalCertificates,
+        ];
+        
+        return view('student_panel.student_dashboard', $page_data);
     }
 
     public function studentlist()
