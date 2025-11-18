@@ -80,7 +80,7 @@
 
                                     <div class="slider-btn mt-30 d-flex flex-wrap justify-content-center gap-3">
                                         <div class="slider-btn mt-30 d-flex flex-wrap justify-content-center">
-                                            <a href="{{ route('admin_panel.signup') }}"
+                                            <a href="{{ route('contact.show') }}"
                                                 class="btn ss-btn mr-15 d-flex align-items-center justify-content-center"
                                                 style="border-radius: 26px; background: #0E4389; border: 1px solid white; font-size: 14px; padding: 12px 20px;"
                                                 data-animation="fadeInLeft" data-delay=".1s">
@@ -136,7 +136,7 @@
 
                                     <div class="slider-btn mt-30 d-flex flex-wrap justify-content-center gap-3">
                                         <div class="slider-btn mt-30 d-flex flex-wrap justify-content-center">
-                                            <a href="{{ route('admin_panel.signup') }}"
+                                            <a href="{{ route('contact.show') }}"
                                                 class="btn ss-btn mr-15 d-flex align-items-center justify-content-center"
                                                 style="border-radius: 26px; background: #0E4389; border: 1px solid white; font-size: 14px; padding: 12px 20px;"
                                                 data-animation="fadeInLeft" data-delay=".1s">
@@ -226,7 +226,7 @@
                                 style="background-color: #E5FFC4;">
                                 <div class="cat">2</div>
                                 <h3 class="text-center mt-3">
-                                    <a href="" onclick="return false;">Book Your Flight Hassle-Free</a>
+                                    <a href="{{ route('contact.show') }}">Book Your Flight Hassle-Free</a>
                                 </h3>
                                 <p class="text-center">
                                     Once your admission is confirmed, we help you book your flight at the best possible

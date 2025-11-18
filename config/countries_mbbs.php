@@ -87,7 +87,7 @@ return [
             'name' => 'Philippines',
             'slug' => 'universities-in-philippines',
             'flag' => 'philippines.png',
-            'image' => 'rec1.jpg',
+            'image' => 'Philippines_ICD.jpg',
             'description' => 'The Philippines is preferred for its English-speaking environment, US-based medical training model, and climate similar to India.'
         ],
         [
@@ -95,7 +95,7 @@ return [
             'name' => 'Malaysia',
             'slug' => 'universities-in-malaysia',
             'flag' => 'malaysia.png',
-            'image' => 'rec1.jpg',
+            'image' => 'Malaysia_ICD.jpg',
             'description' => 'Well-regarded for offering high-quality MBBS courses with multicultural exposure.'
         ],
         [
@@ -103,7 +103,7 @@ return [
             'name' => 'Egypt',
             'slug' => 'universities-in-egypt',
             'flag' => 'egypt.png',
-            'image' => 'rec1.jpg',
+            'image' => 'Egypt_ICD.jpg',
             'description' => 'Ancient land offering modern medical programs with strong historical roots in healthcare sciences.'
         ],
         [
@@ -111,7 +111,7 @@ return [
             'name' => 'United Kingdom',
             'slug' => 'universities-in-united-kingdom',
             'flag' => 'UNITED_KINGDOM.png',
-            'image' => 'rec1.jpg',
+            'image' => 'UnitedKingdom_ICD.jpg',
             'description' => 'Renowned for its prestigious universities and rich academic heritage, the UK offers diverse programs and a multicultural environment, enhancing global career prospects.'
         ],
         [
@@ -119,7 +119,7 @@ return [
             'name' => 'Germany',
             'slug' => 'universities-in-germany',
             'flag' => 'germany-512.webp',
-            'image' => 'rec1.jpg',
+            'image' => 'Germany_ICD.jpg',
             'description' => 'Known for its strong engineering and technical programs, Germany provides tuition-free education in public universities and a vibrant student life amidst historical cities.'
         ],
         [
@@ -127,7 +127,7 @@ return [
             'name' => 'France',
             'slug' => 'universities-in-france',
             'flag' => 'france-512.webp',
-            'image' => 'rec1.jpg',
+            'image' => 'FRANCE_ICD.jpg',
             'description' => 'Combining world-class education with a rich cultural experience, France offers programs in various fields, complemented by its art, cuisine, and history.'
         ],
         [
@@ -135,7 +135,7 @@ return [
             'name' => 'Italy',
             'slug' => 'universities-in-italy',
             'flag' => 'italy-512.webp',
-            'image' => 'rec1.jpg',
+            'image' => 'Italy_ICD.jpg',
             'description' => 'Italy\'s universities are celebrated for arts, architecture, and design programs, set against a backdrop of historical landmarks and Mediterranean lifestyle.'
         ],
         [
@@ -223,7 +223,7 @@ return [
             'name' => 'Malta',
             'slug' => 'universities-in-malta',
             'flag' => 'malta.png',
-            'image' => 'rec1.jpg',
+            'image' => 'Malta_ICD.jpg',
             'description' => 'As an English-speaking country, Malta offers programs in various disciplines, coupled with a Mediterranean lifestyle and historical sites.'
         ],
         [
@@ -231,7 +231,7 @@ return [
             'name' => 'Georgia',
             'slug' => 'universities-in-georgia',
             'flag' => 'GEORGIA-1.jpg',
-            'image' => 'rec1.jpg',
+            'image' => 'Georgia_ICD.jpg',
             'description' => 'Georgia is becoming a favored destination for medical studies, offering affordable tuition and programs taught in English.'
         ],
         [
@@ -239,7 +239,7 @@ return [
             'name' => 'Armenia',
             'slug' => 'universities-in-armenia',
             'flag' => 'ARMENIA.jpg',
-            'image' => 'rec1.jpg',
+            'image' => 'Armenia_ICD.jpg',
             'description' => 'Armenia offers quality education in medicine and technology, with a rich cultural heritage and hospitable environment.'
         ],
         [
@@ -247,7 +247,7 @@ return [
             'name' => 'Belarus',
             'slug' => 'universities-in-belarus',
             'flag' => 'BELARUS.jpg',
-            'image' => 'rec1.jpg',
+            'image' => 'belarus.jpeg',
             'description' => 'Known for its strong science and engineering programs, Belarus provides affordable education with a focus on practical skills.'
         ],
         [
@@ -255,7 +255,7 @@ return [
             'name' => 'Bulgaria',
             'slug' => 'universities-in-bulgaria',
             'flag' => 'BULGARIA.png',
-            'image' => 'rec1.jpg',
+            'image' => 'bulgeria.jpg',
             'description' => 'Bulgaria offers medical and technical programs recognized across Europe, with competitive tuition fees and diverse cultural experiences.'
         ],
         [
@@ -263,7 +263,7 @@ return [
             'name' => 'Ireland',
             'slug' => 'universities-in-ireland',
             'flag' => 'IRELAND.png',
-            'image' => 'rec1.jpg',
+            'image' => 'ireland.jpeg',
             'description' => 'Ireland\'s universities are esteemed for research and innovation, offering a friendly atmosphere and strong links to global industries.'
         ],
         [
@@ -271,7 +271,7 @@ return [
             'name' => 'Finland',
             'slug' => 'universities-in-finland',
             'flag' => 'FINLAND.png',
-            'image' => 'rec1.jpg',
+            'image' => 'finland.jpeg',
             'description' => 'Finland emphasizes student-centered learning and innovation, with a high quality of life and programs in various fields.'
         ]
     ]

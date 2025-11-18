@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ContactFormMail;
 
 class ContactController extends Controller
 {
@@ -21,7 +23,7 @@ class ContactController extends Controller
             'enquiry' => 'nullable',
         ]);
 
-        // Process the form data (e.g., send an email, save to database)
+        Mail::to(config('mail.from.address'))->send(new ContactFormMail($validatedData));
 
         return redirect()->back()->with('success', 'Thank you for your message. We will get back to you shortly.');
     }

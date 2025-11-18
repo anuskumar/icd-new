@@ -430,7 +430,7 @@
                                             </div>
                                         </div>
                                     </li>
-                                    <li><a href="{{ route('contact.show') }}">Contact Us</a></li>
+                                    <li style="margin: unset;"><a href="{{ route('contact.show') }}">Contact Us</a></li>
                                 </ul>
                             </nav>
                         </div>
