@@ -247,7 +247,7 @@ return [
             'name' => 'Belarus',
             'slug' => 'universities-in-belarus',
             'flag' => 'BELARUS.jpg',
-            'image' => 'belarus.jpeg',
+            'image' => 'belarus.jpg',
             'description' => 'Known for its strong science and engineering programs, Belarus provides affordable education with a focus on practical skills.'
         ],
         [
@@ -263,7 +263,7 @@ return [
             'name' => 'Ireland',
             'slug' => 'universities-in-ireland',
             'flag' => 'IRELAND.png',
-            'image' => 'ireland.jpeg',
+            'image' => 'ireland.jpg',
             'description' => 'Ireland\'s universities are esteemed for research and innovation, offering a friendly atmosphere and strong links to global industries.'
         ],
         [
@@ -271,7 +271,7 @@ return [
             'name' => 'Finland',
             'slug' => 'universities-in-finland',
             'flag' => 'FINLAND.png',
-            'image' => 'finland.jpeg',
+            'image' => 'finland.jpg',
             'description' => 'Finland emphasizes student-centered learning and innovation, with a high quality of life and programs in various fields.'
         ]
     ]

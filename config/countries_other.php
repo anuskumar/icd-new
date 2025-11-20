@@ -87,7 +87,7 @@ return [
             'name' => 'Iceland',
             'slug' => 'universities-in-iceland',
             'flag' => 'ICELAND.png',
-            'image' => 'rec1.jpg',
+            'image' => 'iceland.jpg',
             'description' => 'Known for its unique geology and environmental studies, Iceland offers specialized programs amidst breathtaking natural landscapes.'
         ],
         [
@@ -95,7 +95,7 @@ return [
             'name' => 'Slovenia',
             'slug' => 'universities-in-slovenia',
             'flag' => 'slovenia.png',
-            'image' => 'rec1.jpg',
+            'image' => 'Slovenia.jpg',
             'description' => 'Slovenia combines quality education in technology and environmental sciences with a high standard of living and natural beauty.'
         ],
         [
@@ -103,7 +103,7 @@ return [
             'name' => 'North Macedonia',
             'slug' => 'universities-in-north-macedonia',
             'flag' => 'NORTH_MACEDONIA.png',
-            'image' => 'rec1.jpg',
+            'image' => 'NorthMacedonia.jpg',
             'description' => 'North Macedonia offers affordable education in various fields, with a growing number of programs taught in English.'
         ],
         [
@@ -111,7 +111,7 @@ return [
             'name' => 'Estonia',
             'slug' => 'universities-in-estonia',
             'flag' => 'estonia-512.webp',
-            'image' => 'rec1.jpg',
+            'image' => 'Estonia.jpg',
             'description' => 'Estonia is a leader in digital innovation, offering programs in IT and e-governance, attracting tech-savvy students worldwide.'
         ],
         [
@@ -119,7 +119,7 @@ return [
             'name' => 'Luxembourg',
             'slug' => 'universities-in-luxembourg',
             'flag' => 'LUXEMBOURG.png',
-            'image' => 'rec1.jpg',
+            'image' => 'Luxembourg.jpg',
             'description' => 'Luxembourg provides multilingual education opportunities, particularly in finance and European law, within a dynamic economic hub.'
         ],
         [
@@ -127,7 +127,7 @@ return [
             'name' => 'Kazakhstan',
             'slug' => 'universities-in-kazakhstan',
             'flag' => 'KAZAKHSTAN.png',
-            'image' => 'rec1.jpg',
+            'image' => 'Kazakhstan.jpg',
             'description' => 'Kazakhstan offers modern campuses and programs in engineering and natural sciences, with a focus on research and innovation.'
         ],
         [
@@ -135,7 +135,7 @@ return [
             'name' => 'Uzbekistan',
             'slug' => 'universities-in-uzbekistan',
             'flag' => 'uzbekistan.png',
-            'image' => 'rec1.jpg',
+            'image' => 'Uzbekistan.jpg',
             'description' => 'Uzbekistan is investing in higher education reforms, providing opportunities in fields like agriculture, medicine, and IT.'
         ],
         [
@@ -143,7 +143,7 @@ return [
             'name' => 'Tajikistan',
             'slug' => 'universities-in-tajikistan',
             'flag' => 'TAJIKISTAN.png',
-            'image' => 'rec1.jpg',
+            'image' => 'Tajikistan.jpg',
             'description' => 'Tajikistan offers affordable education in medicine and engineering, with a growing emphasis on international collaboration.'
         ],
         [
@@ -151,7 +151,7 @@ return [
             'name' => 'Kyrgyzstan',
             'slug' => 'universities-in-kyrgyzstan',
             'flag' => 'KYRGYSTAN.png',
-            'image' => 'rec1.jpg',
+            'image' => 'Kyrgyzstan.jpg',
             'description' => 'Kyrgyzstan is known for its medical universities offering English-taught programs, attracting students from various countries.'
         ]
     ]
