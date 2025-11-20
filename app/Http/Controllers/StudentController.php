@@ -13,6 +13,7 @@ use App\Models\StudentEducation;
 use App\Models\Qualification;
 use App\Models\User;
 use App\Models\StudentFile;
+use App\Models\EnrollmentModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -26,7 +27,57 @@ class StudentController extends Controller
 {
     public function sdashboard()
     {
-        return view('student_panel.student_dashboard');
+        $user = Auth::user();
+        $student = $user->student;
+        
+        // Get enrollment statistics
+        $totalEnrollments = EnrollmentModel::where('user_id', $user->id)->count();
+        $pendingEnrollments = EnrollmentModel::where('user_id', $user->id)
+            ->where(function($query) {
+                $query->where('status', 'pending')
+                      ->orWhereNull('status');
+            })
+            ->count();
+        $underReviewEnrollments = EnrollmentModel::where('user_id', $user->id)
+            ->where('status', 'under_review')
+            ->count();
+        $verifiedEnrollments = EnrollmentModel::where('user_id', $user->id)
+            ->where('status', 'verified')
+            ->count();
+        $completedEnrollments = EnrollmentModel::where('user_id', $user->id)
+            ->where('status', 'completed')
+            ->count();
+        $rejectedEnrollments = EnrollmentModel::where('user_id', $user->id)
+            ->where('status', 'rejected')
+            ->count();
+        
+        // Get recent enrollments (last 5)
+        $recentEnrollments = EnrollmentModel::where('user_id', $user->id)
+            ->with('college', 'course')
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get();
+        
+        // Get total certificates uploaded
+        $totalCertificates = 0;
+        if ($student) {
+            $totalCertificates = StudentFile::where('student_id', $student->id)->count();
+        }
+        
+        $page_data = [
+            'student' => $student,
+            'user' => $user,
+            'totalEnrollments' => $totalEnrollments,
+            'pendingEnrollments' => $pendingEnrollments,
+            'underReviewEnrollments' => $underReviewEnrollments,
+            'verifiedEnrollments' => $verifiedEnrollments,
+            'completedEnrollments' => $completedEnrollments,
+            'rejectedEnrollments' => $rejectedEnrollments,
+            'recentEnrollments' => $recentEnrollments,
+            'totalCertificates' => $totalCertificates,
+        ];
+        
+        return view('student_panel.student_dashboard', $page_data);
     }
 
     public function studentlist()
@@ -341,19 +392,51 @@ class StudentController extends Controller
         if (!$student) {
             $certificates = collect(); // Empty collection if no student found
         } else {
-            $certificates = StudentFile::with('qualification')->where('student_id', $student->id)->get();
+            $certificates = StudentFile::with('qualification')->where('student_id', $student->id)->orderBy('created_at', 'desc')->get();
         }
 
         return view('student_panel.certificates', compact('qualifications', 'certificates'));
     }
 
+    public function getQualificationFiles($qualificationId)
+    {
+        $student = auth()->user()->student;
+
+        if (!$student) {
+            return response()->json(['success' => false, 'message' => 'No student found.']);
+        }
+
+        $files = StudentFile::where('student_id', $student->id)
+            ->where('qualification_id', $qualificationId)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $filesData = $files->map(function($file) {
+            $filePath = storage_path('app/public/' . $file->files);
+            $fileSize = file_exists($filePath) ? round(filesize($filePath) / 1024, 2) : 0;
+            
+            return [
+                'id' => $file->id,
+                'original_file_name' => $file->original_file_name,
+                'file_size' => $fileSize,
+                'created_at' => $file->created_at->toISOString(),
+            ];
+        });
+
+        return response()->json([
+            'success' => true,
+            'files' => $filesData,
+        ]);
+    }
+
 
     public function uploadCertificate(Request $request)
     {
-        // Validate the incoming request
+        // Validate the incoming request - allow multiple files
         $request->validate([
             'qualification_id' => 'required|exists:qualifications,id',
-            'file' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'files.*' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'files' => 'required|array|min:1',
         ]);
 
         // Ensure the authenticated user has a corresponding student
@@ -363,30 +446,49 @@ class StudentController extends Controller
             return response()->json(['success' => false, 'message' => 'No student found for the authenticated user.']);
         }
 
-        // If the file is present in the request
-        if ($request->hasFile('file')) {
-            $file = $request->file('file');
-            $originalFileName = $file->getClientOriginalName();
-            $filePath = $file->store('certificates', 'public');
+        // Handle multiple file uploads
+        if ($request->hasFile('files')) {
+            $uploadedFiles = [];
+            $errors = [];
 
-            // Store the certificate with the correct student_id
-            $certificate = StudentFile::create([
-                'student_id' => $student->id,  // Correctly use the student’s ID
-                'user_id' => auth()->id(),
-                'qualification_id' => $request->qualification_id,
-                'files' => $filePath,
-                'original_file_name' => $originalFileName,
-            ]);
+            foreach ($request->file('files') as $file) {
+                try {
+                    $originalFileName = $file->getClientOriginalName();
+                    $filePath = $file->store('certificates', 'public');
 
-            // Return the response with the uploaded certificate details
-            return response()->json([
-                'success' => true,
-                'certificate' => $certificate->load('qualification'),
-            ]);
+                    // Create a new certificate record for each file
+                    $certificate = StudentFile::create([
+                        'student_id' => $student->id,
+                        'user_id' => auth()->id(),
+                        'qualification_id' => $request->qualification_id,
+                        'files' => $filePath,
+                        'original_file_name' => $originalFileName,
+                    ]);
+
+                    $uploadedFiles[] = $certificate->load('qualification');
+                } catch (\Exception $e) {
+                    $errors[] = $originalFileName . ': ' . $e->getMessage();
+                }
+            }
+
+            if (count($uploadedFiles) > 0) {
+                return response()->json([
+                    'success' => true,
+                    'message' => count($uploadedFiles) . ' file(s) uploaded successfully!',
+                    'certificates' => $uploadedFiles,
+                    'errors' => $errors,
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Failed to upload files.',
+                    'errors' => $errors,
+                ]);
+            }
         }
 
         // Return an error if file upload failed
-        return response()->json(['success' => false, 'message' => 'File upload failed.']);
+        return response()->json(['success' => false, 'message' => 'No files provided.']);
     }
 
 
