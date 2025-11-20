@@ -144,6 +144,7 @@ Route::get('/getStates/{country_id}', [StudentController::class, 'getStates']);
 //upload certificates
 
 Route::get('/certificates/{student_id?}', [StudentController::class, 'certificates'])->name('student.certificates');
+Route::get('/qualification/{qualificationId}/files', [StudentController::class, 'getQualificationFiles'])->name('student.qualification.files');
 Route::post('/upload-certificate', [StudentController::class, 'uploadCertificate'])->name('student.upload.certificate');
 Route::get('/download/certificate/{id}', [StudentController::class, 'downloadCertificate'])->name('student.download.certificate');
 Route::delete('/delete/certificate/{id}', [StudentController::class, 'deleteCertificate'])->name('student.delete.certificate');

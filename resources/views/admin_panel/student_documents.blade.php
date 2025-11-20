@@ -58,59 +58,82 @@
 
 @section('contentjs')
     <script>
-        // Fetch certificates dynamically
+        // Fetch certificates dynamically using jQuery for better compatibility
         function fetchCertificates() {
-            const studentId = document.getElementById('studentDropdown').value;
-            const tableBody = document.getElementById('certificateTableBody');
+            const studentId = $('#studentDropdown').val();
+            const tableBody = $('#certificateTableBody');
 
             // Clear the table if no student is selected
             if (!studentId) {
-                tableBody.innerHTML = `<tr><td colspan="4">Select a student to view uploaded certificates.</td></tr>`;
+                tableBody.html('<tr><td colspan="4">Select a student to view uploaded certificates.</td></tr>');
                 return;
             }
 
-            fetch(`/admin/documents?student_id=${studentId}`, {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest',
-                    },
-                })
-                .then(response => response.json())
-                .then(data => {
-                    tableBody.innerHTML = ''; // Clear existing rows
+            // Show loading state
+            tableBody.html('<tr><td colspan="4" class="text-center">Loading certificates...</td></tr>');
 
-                    if (data.success && data.certificates.length > 0) {
-                        data.certificates.forEach(certificate => {
-                            tableBody.innerHTML += `
-                                <tr>
-                                    <td>${certificate.student.first_name} ${certificate.student.last_name}</td>
-                                    <td>${certificate.qualification.name}</td>
-                                    <td>${certificate.original_file_name}</td>
-                                    <td>
-                                        <a href="/admin/download/certificate/${certificate.id}" class="btn btn-primary text-white">Download</a>
-                                    </td>
-                                </tr>
-                            `;
+            $.ajax({
+                url: '/admin/documents',
+                method: 'GET',
+                data: {
+                    student_id: studentId
+                },
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                dataType: 'json',
+                success: function(data) {
+                    tableBody.html(''); // Clear existing rows
+
+                    if (data.success && data.certificates && data.certificates.length > 0) {
+                        data.certificates.forEach(function(certificate) {
+                            const studentName = certificate.student ? 
+                                (certificate.student.first_name + ' ' + certificate.student.last_name) : 
+                                'N/A';
+                            const qualificationName = certificate.qualification ? 
+                                certificate.qualification.name : 
+                                'N/A';
+                            const fileName = certificate.original_file_name || 'N/A';
+                            const downloadUrl = '{{ url("/admin/download/certificate") }}/' + certificate.id;
+                            
+                            tableBody.append(
+                                '<tr>' +
+                                    '<td>' + studentName + '</td>' +
+                                    '<td>' + qualificationName + '</td>' +
+                                    '<td>' + fileName + '</td>' +
+                                    '<td>' +
+                                        '<a href="' + downloadUrl + '" class="btn btn-primary btn-sm" target="_blank" style="min-width: 100px; text-align: center;">' +
+                                            '<i class="fa fa-download"></i> Download' +
+                                        '</a>' +
+                                    '</td>' +
+                                '</tr>'
+                            );
                         });
                     } else {
-                        tableBody.innerHTML =
-                            `<tr><td colspan="4">No certificates uploaded for this student.</td></tr>`;
+                        tableBody.html('<tr><td colspan="4" class="text-center">No certificates uploaded for this student.</td></tr>');
                     }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Failed to fetch certificates. Please try again.');
-                });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching certificates:', error);
+                    console.error('Response:', xhr.responseText);
+                    
+                    // If response is HTML (not JSON), it means the AJAX request wasn't recognized
+                    if (xhr.responseText && xhr.responseText.trim().startsWith('<!')) {
+                        tableBody.html('<tr><td colspan="4" class="text-danger">Error: Server returned HTML instead of JSON. Please refresh the page and try again.</td></tr>');
+                    } else {
+                        tableBody.html('<tr><td colspan="4" class="text-danger">Failed to fetch certificates. Please try again.</td></tr>');
+                    }
+                }
+            });
         }
 
         // Trigger fetchCertificates on page load if a student is already selected
-        document.addEventListener('DOMContentLoaded', function() {
-            const selectedStudentId = "{{ $selectedStudent->id ?? '' }}"; // Get selected student ID (if available)
+        $(document).ready(function() {
+            const selectedStudentId = "{{ $selectedStudent->id ?? '' }}";
             if (selectedStudentId) {
-                document.getElementById('studentDropdown').value =
-                selectedStudentId; // Set dropdown to selected student
-                fetchCertificates(); // Fetch certificates for the selected student
+                $('#studentDropdown').val(selectedStudentId);
+                fetchCertificates();
             }
         });
     </script>
