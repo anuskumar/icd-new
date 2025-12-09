@@ -431,6 +431,7 @@
                                         </div>
                                     </li>
                                     <li style="margin: unset;"><a href="{{ route('contact.show') }}">Contact Us</a></li>
+                                    <li style="margin: unset;"><a href="{{ route('blog.index') }}">Blogs</a></li>
                                 </ul>
                             </nav>
                         </div>
@@ -548,6 +549,7 @@
                                 </ul>
                             </li>
                             <li><a href="{{ route('contact.show') }}">Contact Us</a></li>
+                            <li><a href="{{ route('blog.index') }}">Blog</a></li>
 
                         </ul>
                     </div>

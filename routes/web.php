@@ -13,12 +13,12 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SubcategoryController;
 use App\Http\Controllers\EnrollmentController;
+use App\Http\Controllers\BlogController;
+use App\Http\Controllers\AdminBlogController;
 use Illuminate\Support\Facades\Route;
 use Maatwebsite\Excel\Facades\Excel;
 
 use Illuminate\Support\Facades\Artisan;
-
-
 
 /*
 |--------------------------------------------------------------------------
@@ -43,6 +43,11 @@ Route::get('/course-details/{id?}', [HomeController::class, 'courseDetails'])->n
 Route::get('/exam-details/{id?}', [HomeController::class, 'examDetails'])->name('website.exam-details');
 Route::get('/contact-us', [ContactController::class, 'showContactForm'])->name('contact.show');
 Route::post('/contact-us', [ContactController::class, 'submitContactForm'])->name('contact.submit');
+
+
+// Blog routes
+Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
 
 
 // Route::get('/studentlist', [StudentController::class, 'studentlist'])->name('admin_panel.studentlist');
@@ -168,6 +173,14 @@ Route::get('/list/colleges/{countryId}/{name?}', [CollegeController::class, 'lis
 Route::get('/colleges/{id}/brochure', [CollegeController::class, 'downloadBrochure'])->name('college.brochure');
 
 
+Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
+    Route::get('/blog', [AdminBlogController::class, 'index'])->name('admin.blog.index');
+    Route::get('/blog/create', [AdminBlogController::class, 'create'])->name('admin.blog.create');
+    Route::post('/blog', [AdminBlogController::class, 'store'])->name('admin.blog.store');
+    Route::get('/blog/{id}/edit', [AdminBlogController::class, 'edit'])->name('admin.blog.edit');
+    Route::put('/blog/{id}', [AdminBlogController::class, 'update'])->name('admin.blog.update');
+    Route::delete('/blog/{id}', [AdminBlogController::class, 'destroy'])->name('admin.blog.destroy');
+});
 
 
 Route::get('/clear-all', function () {
