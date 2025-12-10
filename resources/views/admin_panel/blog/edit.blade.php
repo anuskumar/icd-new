@@ -44,7 +44,7 @@
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label for="content">Content</label>
-                                <textarea class="form-control @error('content') is-invalid @enderror" id="content" name="content" rows="5">{{ old('content', $blog->content) }}</textarea>
+                                <textarea class="form-control @error('content') is-invalid @enderror" id="blog_content" name="content" rows="5">{{ old('content', $blog->content) }}</textarea>
                                 @error('content')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -76,3 +76,38 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<!-- CKEditor Script -->
+<script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Check if CKEDITOR is defined
+        if (typeof CKEDITOR !== 'undefined') {
+            CKEDITOR.replace('blog_content', {
+                height: 400,
+                filebrowserUploadUrl: "{{ route('ckeditor.upload', ['_token' => csrf_token()]) }}",
+                filebrowserUploadMethod: 'form',
+                toolbar: [
+                    { name: 'document', items: ['Source', '-', 'Save', 'NewPage', 'ExportPdf', 'Preview', 'Print', '-', 'Templates'] },
+                    { name: 'clipboard', items: ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo'] },
+                    { name: 'editing', items: ['Find', 'Replace', '-', 'SelectAll', '-', 'Scayt'] },
+                    { name: 'forms', items: ['Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField'] },
+                    '/',
+                    { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'CopyFormatting', 'RemoveFormat'] },
+                    { name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl', 'Language'] },
+                    { name: 'links', items: ['Link', 'Unlink', 'Anchor'] },
+                    { name: 'insert', items: ['Image', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak', 'Iframe'] },
+                    '/',
+                    { name: 'styles', items: ['Styles', 'Format', 'Font', 'FontSize'] },
+                    { name: 'colors', items: ['TextColor', 'BGColor'] },
+                    { name: 'tools', items: ['Maximize', 'ShowBlocks'] },
+                    { name: 'about', items: ['About'] }
+                ]
+            });
+        } else {
+            console.error('CKEditor not loaded. Please check if the script is properly included.');
+        }
+    });
+</script>
+@endpush

@@ -29,47 +29,47 @@
                 visibility: visible !important;
                 opacity: 1 !important;
             }
-            
+
             .sidebar .sidebar-menu > ul > li.submenu-open ul li {
                 display: block !important;
                 visibility: visible !important;
             }
-            
+
             .sidebar .sidebar-menu > ul > li.submenu-open ul li a {
                 display: flex !important;
                 visibility: visible !important;
                 opacity: 1 !important;
                 color: #67748E !important;
             }
-            
+
             .sidebar .sidebar-menu > ul > li.submenu-open ul li a:hover {
                 color: #FF9F43 !important;
             }
-            
+
             .sidebar .sidebar-menu > ul > li.submenu-open ul li a span {
                 display: inline-block !important;
                 visibility: visible !important;
             }
-            
+
             .sidebar .sidebar-menu > ul > li.submenu-open .submenu-hdr {
                 display: block !important;
                 visibility: visible !important;
                 color: #1B2950 !important;
             }
-            
+
             /* Override mini-sidebar hiding for submenu-open items */
             .mini-sidebar .sidebar .sidebar-menu > ul > li.submenu-open ul {
                 display: block !important;
             }
-            
+
             .mini-sidebar .sidebar .sidebar-menu > ul > li.submenu-open .submenu-hdr {
                 display: block !important;
             }
-            
+
             .mini-sidebar .sidebar .sidebar-menu > ul > li.submenu-open ul li a span {
                 display: inline-block !important;
             }
-            
+
             /* Ensure icons are visible */
             .sidebar .sidebar-menu > ul > li.submenu-open ul li a i,
             .sidebar .sidebar-menu > ul > li.submenu-open ul li a svg {
@@ -90,11 +90,8 @@
         <!-- /Main Wrapper -->
         @include('admin_layout.admin_footer_js')
 
-        <!-- DataTables CSS and JS via CDN -->
-        {{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-        <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script> --}}
+        <!-- Stack for scripts -->
+        @stack('scripts')
 
         @include('admin_layout.popupmodal')
 

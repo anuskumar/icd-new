@@ -15,6 +15,7 @@ use App\Http\Controllers\SubcategoryController;
 use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\AdminBlogController;
+use App\Http\Controllers\CKEditorController;
 use Illuminate\Support\Facades\Route;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -48,6 +49,9 @@ Route::post('/contact-us', [ContactController::class, 'submitContactForm'])->nam
 // Blog routes
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
+
+// CKEditor upload route
+Route::post('ckeditor/upload', [CKEditorController::class, 'upload'])->name('ckeditor.upload');
 
 
 // Route::get('/studentlist', [StudentController::class, 'studentlist'])->name('admin_panel.studentlist');
