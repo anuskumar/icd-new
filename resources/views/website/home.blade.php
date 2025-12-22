@@ -321,9 +321,12 @@
                         <div class="s-about-img p-relative  wow fadeInLeft animated" data-animation="fadeInLeft"
                             data-delay=".4s">
                             <img class="abtimg" src="{{ asset('assets/img/features/about1.png') }}" alt="img">
-
+                            <br>
+                            <br>
+                            <iframe class="v-utube" width="420" height="345"
+                                src="https://www.youtube.com/embed/fiDuteAM_KA">
+                            </iframe>
                         </div>
-
                     </div>
 
                     <div class="col-lg-6 col-md-12 col-sm-12">
@@ -373,12 +376,6 @@
                                 <a href="about.html" class="abtbtn ss-btn smoth-scroll"><b>READ MORE</b><i
                                         class="fal fa-long-arrow-right"></i></a>
                             </div> --}}
-                            <br>
-                            <br>
-                            <iframe class="v-utube" width="420" height="345"
-                                src="https://www.youtube.com/embed/fiDuteAM_KA">
-                            </iframe>
-
                             <div class="about-content2">
                                 <div class="row">
                                     <div class="col-md-12">
