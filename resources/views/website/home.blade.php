@@ -330,15 +330,45 @@
                         <div class="about-content s-about-content pl-15 wow fadeInRight  animated"
                             data-animation="fadeInRight" data-delay=".4s">
                             <div class="about-title second-title pb-25">
-                                <h5> <span class="text-primary"> About ICD Education: </span><br />
-                                    <span class="fs-1 text-dark">Your Trusted Partner For Overseas Education and Study Abroad Opportunities</span></h5>
+                                <h5> <span class="text-primary"> About ICD: </span><br />
+                                    <span class="fs-1 text-dark">About ICD Overseas Education – 25+ Years of Global Trust and Excellence</span></h5>
                             </div>
-                            <p>With 20+ years of experience and 5000+ success stories, ICD Education is your trusted gateway
-                                to top international universities related to Medical & Healthcare Education. We have proudly
-                                partnered with more than 250 reputed universities across 30+ countries, offering a wide
-                                range of programs including MBBS, Nursing, Dental, Allied Health Sciences, as well as UG,
-                                PG, and Diploma courses.</p>
-
+                            <p>
+                                With more than 25 years of trust and credibility, the Institute for Career Development (ICD) stands tall as one of the leading overseas education consultants in India, guiding thousands of students towards their dream of studying abroad.
+                            </p>
+                            <h4>Our Legacy</h4>
+                            <p>
+                                Established in 1983, ICD has consistently provided top-quality overseas education services, helping students secure admission to international universities and colleges across the world. The visionary founder, Mr. Ramakrishnan Nair, laid the foundation of ICD with a mission to make global education accessible to all. His legacy is now carried forward by Attorney Sreekanth R.K, a dynamic and versatile leader who serves as the Director and CEO of ICD.
+                            </p>
+                            <h4>Global Presence & University Partnerships</h4>
+                            <p>
+                                Today, ICD proudly represents over 100 top-ranked universities and colleges across 50+ countries, including Georgia, Uzbekistan, Philippines, Russia, Armenia, Kyrgyzstan, Tajikistan, France, Italy, and more.
+                                We are the authorized representative for these institutions, ensuring students receive reliable guidance and direct admission support. ICD also provides exclusive accommodation facilities and canteens for students in many of these universities, ensuring a safe and supportive environment abroad.
+                            </p>
+                            <h4>Our Network Across India</h4>
+                            <p>
+                                Headquartered in Trivandrum, ICDK Private Ltd. is a key branch of ICD that has been guiding students since 2000 to make the right academic choices. We also operate major branches in Delhi, Bangalore, Ernakulam, Kottayam, Nagercoil, and Calicut.
+                                Our experienced education consultants offer personalized counseling to match your interests, passion, and career goals with the best international programs and universities. From application and visa processing to travel planning, accommodation, and financial arrangements, ICD provides end-to-end overseas education support.
+                            </p>
+                            <h4>More Than Consultants – We’re Mentors for Your Future</h4>
+                            <p>
+                                At ICD, we go beyond consultancy. We believe in being your mentors, advisors, and lifelong partners in your academic journey. We aim to make studying abroad a smooth, informed, and inspiring experience for every student.
+                            </p>
+                            <h4>Entrance Coaching & Test Preparation</h4>
+                            <p>
+                                Since 1983, ICD has been a pioneer in entrance exam coaching. We offer comprehensive preparation for NEET (UG & PG), JEE (Main & Advanced), and foundation courses up to Class XII. Our approach combines innovative teaching methods, individual guidance, and expert faculty support through regular and crash courses, ensuring consistent student success.
+                            </p>
+                            <h4>Expanding Horizons: Aviation, Languages & Skill Development</h4>
+                            <p>
+                                ICD’s excellence extends beyond study abroad. We also offer training in Aviation courses, Foreign Language learning (IELTS, TOEFL, PTE, OET, German, French), and B.Ed and professional skill development programs.
+                                As an authorized NSDC Skill Development partner and affiliate of LBS and Rutronix, ICD helps students enhance their employability through industry-aligned training.
+                                For medical graduates, we provide FMGE, USMLE, IMAT, and PLAB training, enabling them to build successful medical careers abroad.
+                            </p>
+                            <h4>Our Commitment</h4>
+                            <p>
+                                At ICD, your career and future are envisioned with utmost responsibility. Whether it’s MBBS abroad, engineering overseas, or international management programs, we ensure every student finds the right path to success through quality education, expert guidance, and unwavering support.
+                                ICD Overseas Education – Your Gateway to Global Learning and Success.
+                            </p>
                             {{-- <div class="slider-btn mt-20 a-btn">
                                 <a href="about.html" class="abtbtn ss-btn smoth-scroll"><b>READ MORE</b><i
                                         class="fal fa-long-arrow-right"></i></a>
