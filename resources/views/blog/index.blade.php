@@ -43,7 +43,7 @@
                                         </ul>
                                     </div>
                                     <h3><a href="{{ route('blog.show', $blog->slug) }}">{{ $blog->title }}</a></h3>
-                                    <p>{{ Str::limit($blog->content, 200) }}</p>
+                                    <p>{{ Str::limit(strip_tags($blog->content), 200) }}</p>
                                     <div class="blog-btn">
                                         <a href="{{ route('blog.show', $blog->slug) }}" class="btn">Read More</a>
                                     </div>
