@@ -1464,16 +1464,16 @@
                     </div>
                     <div class="col-xl-2">
                         <div class="single-brand">
-                            <a href="https://youtube.com/@icdoverseaseducation?si=NWp78HoB2TC9p_Zu" target="_blank">
+                            <div onclick="playVideo(this, 'VIDEO_ID_HERE')" style="cursor: pointer;">
                                 <img class="img-fluid" style="max-height: 400px; object-fit: cover;"  src="{{ asset('assets/img/brand/AksaStephen.jpg') }}" alt="img">
-                            </a>
+                            </div>
                         </div>
                     </div>
                     <div class="col-xl-2">
                        <div class="single-brand">
-                            <a href="https://youtube.com/@icdoverseaseducation?si=NWp78HoB2TC9p_Zu" target="_blank">
+                            <div onclick="playVideo(this, 'VIDEO_ID_HERE')" style="cursor: pointer;">
                                 <img class="img-fluid" style="max-height: 400px; object-fit: cover;"  src="{{ asset('assets/img/brand/AnaswaraVJ.jpg') }}" alt="img">
-                            </a>
+                            </div>
                         </div>
                     </div>
                     <div class="col-xl-2">
@@ -1485,9 +1485,9 @@
                     </div>
                     <div class="col-xl-2">
                         <div class="single-brand">
-                            <a href="https://youtube.com/@icdoverseaseducation?si=NWp78HoB2TC9p_Zu" target="_blank">
+                            <div onclick="playVideo(this, 'VIDEO_ID_HERE')" style="cursor: pointer;">
                                 <img class="img-fluid" style="max-height: 400px; object-fit: cover;"  src="{{ asset('assets/img/brand/MahimaMili.jpg') }}" alt="img">
-                            </a>
+                            </div>
                         </div>
                     </div>
                     <div class="col-xl-2">
@@ -1499,16 +1499,16 @@
                     </div>
                     <div class="col-xl-2">
                         <div class="single-brand">
-                            <a href="https://youtube.com/@icdoverseaseducation?si=NWp78HoB2TC9p_Zu" target="_blank">
+                            <div onclick="playVideo(this, 'VIDEO_ID_HERE')" style="cursor: pointer;">
                                 <img class="img-fluid" style="max-height: 400px; object-fit: cover;"  src="{{ asset('assets/img/brand/Sebastian.jpg') }}" alt="img">
-                            </a>
+                            </div>
                         </div>
                     </div>
                     <div class="col-xl-2">
                         <div class="single-brand">
-                            <a href="https://youtube.com/@icdoverseaseducation?si=NWp78HoB2TC9p_Zu" target="_blank">
+                            <div onclick="playVideo(this, 'VIDEO_ID_HERE')" style="cursor: pointer;">
                                 <img class="img-fluid" style="max-height: 400px; object-fit: cover;"  src="{{ asset('assets/img/brand/GiftyPhilip.jpg') }}" alt="img">
-                            </a>
+                            </div>
                         </div>
                     </div>
                     <div class="col-xl-2">
@@ -1520,9 +1520,9 @@
                     </div>
                     <div class="col-xl-2">
                         <div class="single-brand">
-                            <a href="https://youtube.com/@icdoverseaseducation?si=NWp78HoB2TC9p_Zu" target="_blank">
+                            <div onclick="playVideo(this, 'VIDEO_ID_HERE')" style="cursor: pointer;">
                                 <img class="img-fluid" style="max-height: 400px; object-fit: cover;"  src="{{ asset('assets/img/brand/ShihanaFathima.jpg') }}" alt="img">
-                            </a>
+                            </div>
                         </div>
                     </div>
                 </div>
