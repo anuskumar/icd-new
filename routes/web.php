@@ -73,14 +73,14 @@ Route::any('register', [LoginController::class, 'register'])->name('register');
 Route::any('test', [LoginController::class, 'test'])->name('test');
 
 
-// Route::get('/category', [CategoryController::class, 'category'])->name('admin_panel.category');
+Route::get('/category', [CategoryController::class, 'category'])->name('admin_panel.category');
 Route::get('/get-category', [CategoryController::class, 'get_category'])->name('admin_panel.get-category');
-// Route::any('/manage-category/{id?}', [CategoryController::class, 'manageCategory'])->name('admin_panel.manage-category');
+Route::any('/manage-category/{id?}', [CategoryController::class, 'manageCategory'])->name('admin_panel.manage-category');
 Route::any('/del-category/{id}', [CategoryController::class, 'delCategory'])->name('admin_panel.del-category');
 
 Route::get('/subcategory', [SubcategoryController::class, 'subcategory'])->name('admin_panel.subcategory');
 Route::get('/get-subcategory', [SubcategoryController::class, 'get_subcategory'])->name('admin_panel.get-subcategory');
-// Route::any('/manage-subcategory/{id?}', [SubcategoryController::class, 'manageSubcategory'])->name('admin_panel.manage-subcategory');
+Route::any('/manage-subcategory/{id?}', [SubcategoryController::class, 'manageSubcategory'])->name('admin_panel.manage-subcategory');
 Route::any('/del-subcategory/{id}', [SubcategoryController::class, 'delSubcategory'])->name('admin_panel.del-subcategory');
 
 Route::get('/exam-accepted', [ExamController::class, 'exam_accepted'])->name('admin_panel.exam-accepted');
@@ -184,6 +184,13 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('/blog/{id}/edit', [AdminBlogController::class, 'edit'])->name('admin.blog.edit');
     Route::put('/blog/{id}', [AdminBlogController::class, 'update'])->name('admin.blog.update');
     Route::delete('/blog/{id}', [AdminBlogController::class, 'destroy'])->name('admin.blog.destroy');
+});
+
+
+Route::group(['prefix' => 'notifications', 'as' => 'notifications.'], function () {
+    Route::get('/', [NotificationController::class, 'index'])->name('index');
+    Route::get('/mark-as-read/{notification}', [NotificationController::class, 'markAsRead'])->name('mark-as-read');
+    Route::get('/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('markAllAsRead');
 });
 
 

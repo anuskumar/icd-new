@@ -131,6 +131,10 @@ class ExamController extends Controller
                 $data->guide = $guidePath;
             }
             $data->save();
+            if(!$req->post('id')){
+                $admins = \App\Models\User::where('user_type', 'A')->get();
+                \Illuminate\Support\Facades\Notification::send($admins, new \App\Notifications\NewExamNotification($data));
+            }
             return redirect()->route('admin_panel.exam-accepted')
                              ->with('success', $req->post('id') ? 'Exam updated successfully' : 'Exam created successfully');
         }

@@ -161,6 +161,8 @@ class CollegeController extends Controller
             // Save college data
             $data->save();
 
+            $is_new = !$req->post('id');
+
             // Update course details
 
             $courseIds = $req->input('course_id', []);
@@ -229,6 +231,11 @@ class CollegeController extends Controller
 
 
             DB::commit();
+
+            if($is_new){
+                $admins = \App\Models\User::where('user_type', 'A')->get();
+                \Illuminate\Support\Facades\Notification::send($admins, new \App\Notifications\NewCollegeNotification($data));
+            }
             // dd($courses);
             return redirect()->route('admin_panel.collegelist')->with('success', $req->post('id') ? 'College updated successfully' : 'College created successfully');
         } catch (\Exception $e) {

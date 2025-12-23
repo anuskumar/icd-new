@@ -51,7 +51,10 @@ class AdminBlogController extends Controller
             $data['featured_image'] = $imagePath;
         }
 
-        Blog::create($data);
+        $blog = Blog::create($data);
+
+        $admins = \App\Models\User::where('user_type', 'A')->get();
+        \Illuminate\Support\Facades\Notification::send($admins, new \App\Notifications\NewBlogNotification($blog));
 
         return redirect()->route('admin.blog.index')->with('success', 'Blog post created successfully.');
     }

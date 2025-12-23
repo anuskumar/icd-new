@@ -90,6 +90,8 @@ class CourseController extends Controller
                 if ($req->post('id')) {
                     return redirect()->route('admin_panel.courselist')->with('success', 'Course updated successfully');
                 } else {
+                    $admins = \App\Models\User::where('user_type', 'A')->get();
+                    \Illuminate\Support\Facades\Notification::send($admins, new \App\Notifications\NewCourseNotification($data));
                     return redirect()->route('admin_panel.courselist')->with('success', 'Course created successfully');
                 }
             } catch (\Exception $e) {
