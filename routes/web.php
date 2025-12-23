@@ -177,6 +177,7 @@ Route::get('/list/colleges/{countryId}/{name?}', [CollegeController::class, 'lis
 Route::get('/colleges/{id}/brochure', [CollegeController::class, 'downloadBrochure'])->name('college.brochure');
 
 
+
 Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('/blog', [AdminBlogController::class, 'index'])->name('admin.blog.index');
     Route::get('/blog/create', [AdminBlogController::class, 'create'])->name('admin.blog.create');
@@ -184,6 +185,11 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('/blog/{id}/edit', [AdminBlogController::class, 'edit'])->name('admin.blog.edit');
     Route::put('/blog/{id}', [AdminBlogController::class, 'update'])->name('admin.blog.update');
     Route::delete('/blog/{id}', [AdminBlogController::class, 'destroy'])->name('admin.blog.destroy');
+
+    Route::get('/courselist', [CourseController::class, 'courselist'])->name('admin_panel.courselist');
+    Route::get('/get-courselist', [CourseController::class, 'get_courselist'])->name('admin_panel.get-courselist');
+    Route::any('/courses/{id?}', [CourseController::class, 'courses'])->name('admin_panel.courses');
+    Route::any('/del-course/{id}', [CourseController::class, 'delCourse'])->name('admin_panel.del-course');
 });
 
 

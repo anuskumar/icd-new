@@ -280,9 +280,12 @@ class AdminController extends Controller
     {
         $certificate = StudentFile::findOrFail($id);
 
+        // Use the original file name when downloading, with a fallback to the stored filename
+        $fileName = $certificate->original_file_name ?? basename($certificate->files);
+
         // Check if file exists
         if (Storage::disk('public')->exists($certificate->files)) {
-            return response()->download(storage_path("app/public/{$certificate->files}"), $certificate->original_file_name);
+            return response()->download(storage_path("app/public/{$certificate->files}"), $fileName);
         }
 
         return back()->with('error', 'File not found!');
