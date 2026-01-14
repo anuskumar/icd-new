@@ -25,6 +25,9 @@ class ContactController extends Controller
 
         Mail::to(config('mail.from.address'))->send(new ContactFormMail($validatedData));
 
+        $admins = \App\Models\User::where('user_type', 'A')->get();
+        \Illuminate\Support\Facades\Notification::send($admins, new \App\Notifications\NewContactFormNotification($validatedData));
+
         return redirect()->back()->with('success', 'Thank you for your message. We will get back to you shortly.');
     }
 }

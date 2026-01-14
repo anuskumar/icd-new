@@ -5574,6 +5574,9 @@ font-weight: 500;
 .blog-btn a:hover {
 color: #141b22;
 }
+.blog-btn .btn{
+    color: #fff !important;
+}
 .blog-btn2 a {
     display: inline-block;
     color: #C0C0C0;

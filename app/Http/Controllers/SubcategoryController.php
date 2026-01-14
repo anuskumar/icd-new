@@ -36,41 +36,43 @@ class SubcategoryController extends Controller
         ->make(true);
     }
 
-    // public function manageSubcategory(Request $req, $id = '')
-    // {
-    //     if ($req->isMethod('post')) {
-    //         if ($req->post('id') == '') {
-    //             $data = new Subcategory;
-    //         } else {
-    //             $data = Subcategory::find($req->post('id'));
-    //         }
+    public function manageSubcategory(Request $req, $id = '')
+    {
+        if ($req->isMethod('post')) {
+            if ($req->post('id') == '') {
+                $data = new Subcategory;
+            } else {
+                $data = Subcategory::find($req->post('id'));
+            }
 
-    //         $data->name = $req->post('name');
-    //         $data->category_id = $req->post('category_id'); // The setCategoryIdAttribute will handle JSON encoding
-    //         $data->rank = $req->post('rank');
-    //         $data->status = $req->post('status');
+            $data->name = $req->post('name');
+            $data->category_id = $req->post('category_id'); // The setCategoryIdAttribute will handle JSON encoding
+            $data->rank = $req->post('rank');
+            $data->status = $req->post('status');
 
-    //         $data->save();
+            $data->save();
 
-    //         if ($req->post('id')) {
-    //             return redirect()->route('admin_panel.subcategory')->with('success', 'Subcategory updated successfully');
-    //         } else {
-    //             return redirect()->route('admin_panel.subcategory')->with('success', 'Subcategory created successfully');
-    //         }
-    //     }
+            if ($req->post('id')) {
+                return redirect()->route('admin_panel.subcategory')->with('success', 'Subcategory updated successfully');
+            } else {
+                $admins = \App\Models\User::where('user_type', 'A')->get();
+                \Illuminate\Support\Facades\Notification::send($admins, new \App\Notifications\NewSubcategoryNotification($data));
+                return redirect()->route('admin_panel.subcategory')->with('success', 'Subcategory created successfully');
+            }
+        }
 
-    //     if ($id) {
-    //         $page_data['subcategory'] = Subcategory::find($id);
-    //     }
-    //     $usedRanks = Subcategory::where('id', '!=', $id)->pluck('rank')->toArray();
-    //     info($usedRanks);
+        if ($id) {
+            $page_data['subcategory'] = Subcategory::find($id);
+        }
+        $usedRanks = Subcategory::where('id', '!=', $id)->pluck('rank')->toArray();
+        info($usedRanks);
 
-    //     $page_data['usedRanks'] = $usedRanks;
-    //     $page_data['category'] = Category::all();
-    //     $page_data['menu'] = 'subcategory';
+        $page_data['usedRanks'] = $usedRanks;
+        $page_data['category'] = Category::all();
+        $page_data['menu'] = 'subcategory';
 
-    //     return view('admin_panel.add_subcategory')->with($page_data);
-    // }
+        return view('admin_panel.add_subcategory')->with($page_data);
+    }
 
 
     public function delSubcategory(Request $request, $id)

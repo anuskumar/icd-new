@@ -94,6 +94,9 @@
                             <li><a href="{{ route('admin_panel.userlist') }}"><i
                                         data-feather="plus-square"></i><span>User
                                         Management</span></a></li>
+                            <li><a href="{{ route('admin.blog.index') }}"><i
+                                        data-feather="plus-square"></i><span>Blog
+                                        Management</span></a></li>
                             {{-- elseif(Auth::user()->user_type === 'S') <!-- Student -->
                             <li><a href="{{ route('student_panel.student_dashboard') }}"><i data-feather="plus-square"></i><span>Student Dashboard</span></a></li> --}}
                         @elseif(Auth::user()->user_type === 'staff' || Auth::user()->user_type === 'sub_agent')

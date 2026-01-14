@@ -79,108 +79,57 @@
             </a>
         </li>
         <li class="nav-item nav-item-box">
-            <a href="email.html">
+            <a href="https://mail.google.com/mail/u/0/#inbox" target="_blank">
                 <i data-feather="mail"></i>
-                <span class="badge rounded-pill">1</span>
+                <span class="badge rounded-pill"></span>
             </a>
         </li>
         <!-- Notifications -->
         <li class="nav-item dropdown nav-item-box">
             <a href="javascript:void(0);" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
-                <i data-feather="bell"></i><span class="badge rounded-pill">2</span>
+                <i data-feather="bell"></i><span class="badge rounded-pill">{{ auth()->user()->unreadNotifications->count() }}</span>
             </a>
             <div class="dropdown-menu notifications">
                 <div class="topnav-dropdown-header">
                     <span class="notification-title">Notifications</span>
-                    <a href="javascript:void(0)" class="clear-noti"> Clear All </a>
+                    <a href="{{ route('notifications.markAllAsRead') }}" class="clear-noti"> Clear All </a>
                 </div>
                 <div class="noti-content">
                     <ul class="notification-list">
-                        <li class="notification-message">
-                            <a href="activities.html">
-                                <div class="media d-flex">
-                                    <span class="avatar flex-shrink-0">
-                                        <img alt=""
-                                            src="{{ asset('admin_assets/assets/img/profiles/avatar-02.jpg') }}">
-                                    </span>
-                                    <div class="media-body flex-grow-1">
-                                        <p class="noti-details"><span class="noti-title">John Doe</span> added new task
-                                            <span class="noti-title">Patient appointment booking</span>
-                                        </p>
-                                        <p class="noti-time"><span class="notification-time">4 mins ago</span></p>
+                        @forelse(auth()->user()->unreadNotifications as $notification)
+                            <li class="notification-message">
+                                <a href="#">
+                                    <div class="media d-flex">
+                                        <span class="avatar flex-shrink-0">
+                                            <img alt=""
+                                                src="{{ asset('admin_assets/assets/img/profiles/avatar-02.jpg') }}">
+                                        </span>
+                                        <div class="media-body flex-grow-1">
+                                            <p class="noti-details">
+                                                <span class="noti-title">{{ $notification->data['message'] }}</span>
+                                            </p>
+                                            <p class="noti-time"><span class="notification-time">{{ $notification->created_at->diffForHumans() }}</span></p>
+                                        </div>
                                     </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="notification-message">
-                            <a href="activities.html">
-                                <div class="media d-flex">
-                                    <span class="avatar flex-shrink-0">
-                                        <img alt=""
-                                            src="{{ asset('admin_assets/assets/img/profiles/avatar-03.jpg') }}">
-                                    </span>
-                                    <div class="media-body flex-grow-1">
-                                        <p class="noti-details"><span class="noti-title">Tarah Shropshire</span>
-                                            changed the task name <span class="noti-title">Appointment booking with
-                                                payment gateway</span></p>
-                                        <p class="noti-time"><span class="notification-time">6 mins ago</span></p>
+                                </a>
+                            </li>
+                        @empty
+                            <li class="notification-message">
+                                <a href="#">
+                                    <div class="media d-flex">
+                                        <div class="media-body flex-grow-1">
+                                            <p class="noti-details">
+                                                <span class="noti-title">No notifications found</span>
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="notification-message">
-                            <a href="activities.html">
-                                <div class="media d-flex">
-                                    <span class="avatar flex-shrink-0">
-                                        <img alt=""
-                                            src="{{ asset('admin_assets/assets/img/profiles/avatar-06.jpg') }}">
-                                    </span>
-                                    <div class="media-body flex-grow-1">
-                                        <p class="noti-details"><span class="noti-title">Misty Tison</span> added
-                                            <span class="noti-title">Domenic Houston</span> and <span
-                                                class="noti-title">Claire Mapes</span> to project <span
-                                                class="noti-title">Doctor available module</span>
-                                        </p>
-                                        <p class="noti-time"><span class="notification-time">8 mins ago</span></p>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="notification-message">
-                            <a href="activities.html">
-                                <div class="media d-flex">
-                                    <span class="avatar flex-shrink-0">
-                                        <img alt=""
-                                            src="{{ asset('admin_assets/assets/img/profiles/avatar-17.jpg') }}">
-                                    </span>
-                                    <div class="media-body flex-grow-1">
-                                        <p class="noti-details"><span class="noti-title">Rolland Webber</span>
-                                            completed task <span class="noti-title">Patient and Doctor video
-                                                conferencing</span></p>
-                                        <p class="noti-time"><span class="notification-time">12 mins ago</span></p>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="notification-message">
-                            <a href="activities.html">
-                                <div class="media d-flex">
-                                    <span class="avatar flex-shrink-0">
-                                        <img alt=""
-                                            src="{{ asset('admin_assets/assets/img/profiles/avatar-13.jpg') }}">
-                                    </span>
-                                    <div class="media-body flex-grow-1">
-                                        <p class="noti-details"><span class="noti-title">Bernardo Galaviz</span> added
-                                            new task <span class="noti-title">Private chat module</span></p>
-                                        <p class="noti-time"><span class="notification-time">2 days ago</span></p>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
+                                </a>
+                            </li>
+                        @endforelse
                     </ul>
                 </div>
                 <div class="topnav-dropdown-footer">
-                    <a href="activities.html">View all Notifications</a>
+                    <a href="{{ route('notifications.index') }}">View all Notifications</a>
                 </div>
             </div>
         </li>

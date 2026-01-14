@@ -67,6 +67,8 @@ class AdmissionController extends Controller
 			if ($req->post('id')) {
             	return redirect()->route('admin_panel.admission')->with('success', 'Admission updated successfully');
 	        } else {
+                $admins = \App\Models\User::where('user_type', 'A')->get();
+                \Illuminate\Support\Facades\Notification::send($admins, new \App\Notifications\NewAdmissionNotification($data));
 	            return redirect()->route('admin_panel.admission')->with('success', 'Admission created successfully');
 	        }
   		}

@@ -29,12 +29,15 @@ class EnrollmentController extends Controller
         }
 
         $user = Auth::user();
-        EnrollmentModel::create([
+        $enrollment = EnrollmentModel::create([
             'user_id' => $user->id,
             'college_id' => $request->college_id,
             'course_id' => $request->course_id
 
         ]);
+
+        $admins = \App\Models\User::where('user_type', 'A')->get();
+        \Illuminate\Support\Facades\Notification::send($admins, new \App\Notifications\NewEnrollmentNotification($enrollment));
 
         return response()->json(['message' => 'Enrollment request sent successfully. We will contact you soon.'], 200);
     }
@@ -85,6 +88,8 @@ class EnrollmentController extends Controller
         $enrollment = EnrollmentModel::find($request->enrollment_id);
         $enrollment->status = $request->status;
         $enrollment->save();
+
+        $enrollment->user->notify(new \App\Notifications\EnrollmentStatusUpdated($enrollment));
 
         return response()->json(['message' => 'Status updated successfully!']);
     }

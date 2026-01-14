@@ -13,12 +13,13 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SubcategoryController;
 use App\Http\Controllers\EnrollmentController;
+use App\Http\Controllers\BlogController;
+use App\Http\Controllers\AdminBlogController;
+use App\Http\Controllers\CKEditorController;
 use Illuminate\Support\Facades\Route;
 use Maatwebsite\Excel\Facades\Excel;
 
 use Illuminate\Support\Facades\Artisan;
-
-
 
 /*
 |--------------------------------------------------------------------------
@@ -45,6 +46,14 @@ Route::get('/contact-us', [ContactController::class, 'showContactForm'])->name('
 Route::post('/contact-us', [ContactController::class, 'submitContactForm'])->name('contact.submit');
 
 
+// Blog routes
+Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
+
+// CKEditor upload route
+Route::post('ckeditor/upload', [CKEditorController::class, 'upload'])->name('ckeditor.upload');
+
+
 // Route::get('/studentlist', [StudentController::class, 'studentlist'])->name('admin_panel.studentlist');
 Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin_panel.dashboard');
 Route::get('/userlist', [AdminController::class, 'userlist'])->name('admin_panel.userlist');
@@ -64,14 +73,14 @@ Route::any('register', [LoginController::class, 'register'])->name('register');
 Route::any('test', [LoginController::class, 'test'])->name('test');
 
 
-// Route::get('/category', [CategoryController::class, 'category'])->name('admin_panel.category');
+Route::get('/category', [CategoryController::class, 'category'])->name('admin_panel.category');
 Route::get('/get-category', [CategoryController::class, 'get_category'])->name('admin_panel.get-category');
-// Route::any('/manage-category/{id?}', [CategoryController::class, 'manageCategory'])->name('admin_panel.manage-category');
+Route::any('/manage-category/{id?}', [CategoryController::class, 'manageCategory'])->name('admin_panel.manage-category');
 Route::any('/del-category/{id}', [CategoryController::class, 'delCategory'])->name('admin_panel.del-category');
 
 Route::get('/subcategory', [SubcategoryController::class, 'subcategory'])->name('admin_panel.subcategory');
 Route::get('/get-subcategory', [SubcategoryController::class, 'get_subcategory'])->name('admin_panel.get-subcategory');
-// Route::any('/manage-subcategory/{id?}', [SubcategoryController::class, 'manageSubcategory'])->name('admin_panel.manage-subcategory');
+Route::any('/manage-subcategory/{id?}', [SubcategoryController::class, 'manageSubcategory'])->name('admin_panel.manage-subcategory');
 Route::any('/del-subcategory/{id}', [SubcategoryController::class, 'delSubcategory'])->name('admin_panel.del-subcategory');
 
 Route::get('/exam-accepted', [ExamController::class, 'exam_accepted'])->name('admin_panel.exam-accepted');
@@ -168,6 +177,27 @@ Route::get('/list/colleges/{countryId}/{name?}', [CollegeController::class, 'lis
 Route::get('/colleges/{id}/brochure', [CollegeController::class, 'downloadBrochure'])->name('college.brochure');
 
 
+
+Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
+    Route::get('/blog', [AdminBlogController::class, 'index'])->name('admin.blog.index');
+    Route::get('/blog/create', [AdminBlogController::class, 'create'])->name('admin.blog.create');
+    Route::post('/blog', [AdminBlogController::class, 'store'])->name('admin.blog.store');
+    Route::get('/blog/{id}/edit', [AdminBlogController::class, 'edit'])->name('admin.blog.edit');
+    Route::put('/blog/{id}', [AdminBlogController::class, 'update'])->name('admin.blog.update');
+    Route::delete('/blog/{id}', [AdminBlogController::class, 'destroy'])->name('admin.blog.destroy');
+
+    Route::get('/courselist', [CourseController::class, 'courselist'])->name('admin_panel.courselist');
+    Route::get('/get-courselist', [CourseController::class, 'get_courselist'])->name('admin_panel.get-courselist');
+    Route::any('/courses/{id?}', [CourseController::class, 'courses'])->name('admin_panel.courses');
+    Route::any('/del-course/{id}', [CourseController::class, 'delCourse'])->name('admin_panel.del-course');
+});
+
+
+Route::group(['prefix' => 'notifications', 'as' => 'notifications.'], function () {
+    Route::get('/', [NotificationController::class, 'index'])->name('index');
+    Route::get('/mark-as-read/{notification}', [NotificationController::class, 'markAsRead'])->name('mark-as-read');
+    Route::get('/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('markAllAsRead');
+});
 
 
 Route::get('/clear-all', function () {

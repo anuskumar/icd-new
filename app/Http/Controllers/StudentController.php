@@ -499,9 +499,11 @@ class StudentController extends Controller
         $certificate = StudentFile::findOrFail($id);
         $filePath = storage_path('app/public/' . $certificate->files);
 
-        // Use the original file name when downloading
+        // Use the original file name when downloading, with a fallback to the stored filename
+        $fileName = $certificate->original_file_name ?? basename($certificate->files);
+
         if (file_exists($filePath)) {
-            return response()->download($filePath, $certificate->original_file_name);
+            return response()->download($filePath, $fileName);
         }
 
         return redirect()->back()->with('error', 'File not found.');

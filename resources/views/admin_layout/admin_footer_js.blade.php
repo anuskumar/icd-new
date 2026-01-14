@@ -228,9 +228,14 @@
         ]
     };
 
-    CKEDITOR.replace('editor', editorConfig);
-    CKEDITOR.replace('admission_editor', editorConfig);
-    CKEDITOR.replace('syllabus_editor', editorConfig);
+    // Initialize CKEditor only for existing elements
+    const editorElements = ['editor', 'admission_editor', 'syllabus_editor'];
+
+    editorElements.forEach(elementId => {
+        if (document.getElementById(elementId)) {
+            CKEDITOR.replace(elementId, editorConfig);
+        }
+    });
 
     // Remove CKEditor outdated version warning
     CKEDITOR.on('instanceReady', function() {

@@ -8,11 +8,11 @@ use Illuminate\Support\Facades\Redirect;
 
 class CategoryController extends Controller
 {
-    // public function category()
-    // {
-    //     $page_data['menu'] = 'category';
-    //     return view('admin_panel.category')->with($page_data);
-    // }
+    public function category()
+    {
+        $page_data['menu'] = 'category';
+        return view('admin_panel.category')->with($page_data);
+    }
 
     public function get_category()
     {
@@ -35,32 +35,34 @@ class CategoryController extends Controller
             ->make(true);
     }
 
-    // public function manageCategory(Request $req,$id='')
-    // {
-    // 	if($_POST)
-    // 	{
-    // 		if ($req->post('id') == '') {
-    //             $data = new Category;
-    //           } else {
-    //             $data = Category::find($req->post('id'));
-    //         }
+    public function manageCategory(Request $req,$id='')
+    {
+    	if($_POST)
+    	{
+    		if ($req->post('id') == '') {
+                $data = new Category;
+              } else {
+                $data = Category::find($req->post('id'));
+            }
 
-    // 		$data->name = $req->post('name');
-    // 		$data->status = $req->post('status');
+    		$data->name = $req->post('name');
+    		$data->status = $req->post('status');
 
-    // 		$data->save();
-    // 		if ($req->post('id')) {
-    //         	return redirect()->route('admin_panel.category')->with('success', 'Category updated successfully');
-    //         } else {
-    //             return redirect()->route('admin_panel.category')->with('success', 'Category created successfully');
-    //         }
-    // 	}
-    // 	if ($id) {
-    //         $page_data['category'] = Category::find($id);
-    //     }
-    // 	$page_data['menu'] = 'category';
-    //     return view('admin_panel.add_category')->with($page_data);
-    // }
+    		$data->save();
+    		if ($req->post('id')) {
+            	return redirect()->route('admin_panel.category')->with('success', 'Category updated successfully');
+            } else {
+                $admins = \App\Models\User::where('user_type', 'A')->get();
+                \Illuminate\Support\Facades\Notification::send($admins, new \App\Notifications\NewCategoryNotification($data));
+                return redirect()->route('admin_panel.category')->with('success', 'Category created successfully');
+            }
+    	}
+    	if ($id) {
+            $page_data['category'] = Category::find($id);
+        }
+    	$page_data['menu'] = 'category';
+        return view('admin_panel.add_category')->with($page_data);
+    }
 
 
     public function delCategory(Request $request, $id)
