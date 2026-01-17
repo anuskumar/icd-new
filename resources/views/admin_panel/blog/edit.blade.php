@@ -61,7 +61,12 @@
                             @if ($blog->featured_image)
                                 <div class="form-group">
                                     <label>Current Image</label>
-                                    <img src="{{ asset('storage/' . $blog->featured_image) }}" alt="{{ $blog->title }}" width="200">
+                                    <img id="featured-image-preview" src="{{ asset('storage/' . $blog->featured_image) }}" alt="{{ $blog->title }}" width="200">
+                                </div>
+                            @else
+                                <div class="form-group" style="display: none;">
+                                    <label>Current Image</label>
+                                    <img id="featured-image-preview" src="" alt="Featured image preview" width="200">
                                 </div>
                             @endif
                         </div>
@@ -82,6 +87,28 @@
 <script src="https://cdn.ckeditor.com/4.25.1-lts/standard/ckeditor.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        const fileInput = document.getElementById('featured_image');
+        const previewImage = document.getElementById('featured-image-preview');
+
+        if (fileInput && previewImage) {
+            fileInput.addEventListener('change', function() {
+                const file = this.files && this.files[0];
+                if (!file) {
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImage.src = e.target.result;
+                    const wrapper = previewImage.closest('.form-group');
+                    if (wrapper) {
+                        wrapper.style.display = '';
+                    }
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
         // Check if CKEDITOR is defined
         if (typeof CKEDITOR !== 'undefined') {
             CKEDITOR.replace('blog_content', {

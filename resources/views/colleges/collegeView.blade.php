@@ -143,7 +143,7 @@
     <div class="container py-5 bg-rgb(214, 242, 254)">
         <!-- College Details Section -->
         <div class="d-flex align-items-center mb-4">
-            <img src="{{ asset('storage/app/public/' . $collegeShow->image) }}" alt="{{ $collegeShow->name }}" class="me-3"
+            <img src="{{ asset('storage/' . $collegeShow->image) }}" alt="{{ $collegeShow->name }}" class="me-3"
                 style="width: 90px; height: auto;">
             <div>
                 <h1>{{ $collegeShow->name }}</h1>
@@ -162,7 +162,7 @@
         <div class="row g-3">
             <div class="col">
                 <div class="position-relative">
-                    <img src="{{ asset('storage/app/public/' . $collegeShow->banner_image) }}" alt="{{ $collegeShow->name }}"
+                    <img src="{{ asset('storage/' . $collegeShow->banner_image) }}" alt="{{ $collegeShow->name }}"
                         class="img-fluid rounded banner-image">
                 </div>
             </div>

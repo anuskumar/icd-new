@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\Blog;
 use App\Models\College;
 use App\Models\Course;
 use App\Models\User;
@@ -13,7 +14,13 @@ class HomeController extends Controller
 {
     public function home()
     {
-        return view("website.home");
+        $blogs = Blog::with('author')
+            ->where('is_published', true)
+            ->orderByDesc('published_at')
+            ->orderByDesc('created_at')
+            ->get();
+
+        return view('website.home', compact('blogs'));
     }
 
     public function collegeDetails()

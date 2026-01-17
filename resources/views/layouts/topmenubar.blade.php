@@ -558,30 +558,57 @@
                     <div class="col-auto d-none d-lg-block header-user">
                         @auth
                             <div class="dropdown">
-                                <a class="dropdown-toggle" id="userDropdown" data-toggle="dropdown" aria-haspopup="true"
-                                    aria-expanded="false">
-                                    {{ Auth::user()->name }}
+                                <a class="dropdown-toggle" id="userDropdown" href="#" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false" onclick="return false;" style="display: flex; align-items: center; gap: 8px;">
+                                    @if(Auth::user()->image)
+                                        <img src="{{ asset('storage/' . Auth::user()->image) }}" alt="{{ Auth::user()->name }}" 
+                                             style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 2px solid #0E4389;">
+                                    @else
+                                        <img src="{{ asset('admin_assets/assets/img/profiles/avator1.jpg') }}" alt="{{ Auth::user()->name }}" 
+                                             style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 2px solid #0E4389;">
+                                    @endif
+                                    <span>{{ Auth::user()->name }}</span>
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="userDropdown">
                                     @if (Auth::user()->user_type == 'A')
-                                        <li style="padding-left:30px; "><a
+                                        <li style="padding-left:30px; "><a class="dropdown-item"
                                                 href="{{ route('admin_panel.dashboard') }}">Dashboard</a></li>
-                                        <li style="padding-left:30px;"><a href="{{ route('logout') }}">Logout</a></li>
+                                        <li style="padding-left:30px;">
+                                            <a class="dropdown-item" href="{{ url('/settings') }}" onclick="event.stopPropagation(); window.location.href='{{ url('/settings') }}';">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-settings me-2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>Settings
+                                            </a>
+                                        </li>
+                                        <li style="padding-left:30px;"><a class="dropdown-item" href="{{ route('logout') }}">Logout</a></li>
                                     @endif
                                     @if (Auth::user()->user_type == 'S')
-                                        <li style="padding-left:30px; "><a
+                                        <li style="padding-left:30px; "><a class="dropdown-item"
                                                 href="{{ route('student_panel.student_dashboard') }}">Dashboard</a></li>
-                                        <li style="padding-left:30px;"><a href="{{ route('logout') }}">Logout</a></li>
+                                        <li style="padding-left:30px;">
+                                            <a class="dropdown-item" href="{{ url('/settings') }}" onclick="event.stopPropagation(); window.location.href='{{ url('/settings') }}';">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-settings me-2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>Settings
+                                            </a>
+                                        </li>
+                                        <li style="padding-left:30px;"><a class="dropdown-item" href="{{ route('logout') }}">Logout</a></li>
                                     @endif
                                     @if (Auth::user()->user_type == 'staff')
-                                        <li style="padding-left:30px; "><a
+                                        <li style="padding-left:30px; "><a class="dropdown-item"
                                                 href="{{ route('admin_panel.dashboard') }}">Dashboard</a></li>
-                                        <li style="padding-left:30px;"><a href="{{ route('logout') }}">Logout</a></li>
+                                        <li style="padding-left:30px;">
+                                            <a class="dropdown-item" href="{{ url('/settings') }}" onclick="event.stopPropagation(); window.location.href='{{ url('/settings') }}';">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-settings me-2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>Settings
+                                            </a>
+                                        </li>
+                                        <li style="padding-left:30px;"><a class="dropdown-item" href="{{ route('logout') }}">Logout</a></li>
                                     @endif
                                     @if (Auth::user()->user_type == 'sub_agent')
-                                        <li style="padding-left:30px; "><a
+                                        <li style="padding-left:30px; "><a class="dropdown-item"
                                                 href="{{ route('admin_panel.dashboard') }}">Dashboard</a></li>
-                                        <li style="padding-left:30px;"><a href="{{ route('logout') }}">Logout</a></li>
+                                        <li style="padding-left:30px;">
+                                            <a class="dropdown-item" href="{{ url('/settings') }}" onclick="event.stopPropagation(); window.location.href='{{ url('/settings') }}';">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-settings me-2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>Settings
+                                            </a>
+                                        </li>
+                                        <li style="padding-left:30px;"><a class="dropdown-item" href="{{ route('logout') }}">Logout</a></li>
                                     @endif
                                 </ul>
                             </div>
@@ -698,6 +725,7 @@
                 event.stopPropagation(); // Prevents the click from closing immediately
                 dropdownMenu.classList.toggle('show');
             });
+
 
             window.addEventListener('click', function(event) {
                 if (!dropdownToggle.contains(event.target) && !dropdownMenu.contains(event.target)) {

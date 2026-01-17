@@ -34,7 +34,7 @@ class AdminBlogController extends Controller
             'slug' => 'required|unique:blogs,slug',
             'content' => 'required|string',
             'is_published' => 'required|boolean',
-            'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);
 
         $data = [
@@ -47,7 +47,16 @@ class AdminBlogController extends Controller
         ];
 
         if ($request->hasFile('featured_image')) {
-            $imagePath = $request->file('featured_image')->store('blog_images', 'public');
+            $featuredImage = $request->file('featured_image');
+            if (!$featuredImage->isValid()) {
+                return back()->withErrors(['featured_image' => 'Image upload failed. Please try again.'])->withInput();
+            }
+
+            $imagePath = $featuredImage->store('blog_images', 'public');
+            if (!$imagePath) {
+                return back()->withErrors(['featured_image' => 'Image upload failed. Please try again.'])->withInput();
+            }
+
             $data['featured_image'] = $imagePath;
         }
 
@@ -74,7 +83,7 @@ class AdminBlogController extends Controller
             'slug' => ['required', Rule::unique('blogs')->ignore($blog->id, 'id')],
             'content' => 'required|string',
             'is_published' => 'required|boolean',
-            'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);
 
         $data = [
@@ -86,10 +95,20 @@ class AdminBlogController extends Controller
         ];
 
         if ($request->hasFile('featured_image')) {
+            $featuredImage = $request->file('featured_image');
+            if (!$featuredImage->isValid()) {
+                return back()->withErrors(['featured_image' => 'Image upload failed. Please try again.'])->withInput();
+            }
+
             if ($blog->featured_image) {
                 Storage::disk('public')->delete($blog->featured_image);
             }
-            $imagePath = $request->file('featured_image')->store('blog_images', 'public');
+
+            $imagePath = $featuredImage->store('blog_images', 'public');
+            if (!$imagePath) {
+                return back()->withErrors(['featured_image' => 'Image upload failed. Please try again.'])->withInput();
+            }
+
             $data['featured_image'] = $imagePath;
         }
 

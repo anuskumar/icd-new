@@ -16,6 +16,7 @@ use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\AdminBlogController;
 use App\Http\Controllers\CKEditorController;
+use App\Http\Controllers\SettingsController;
 use Illuminate\Support\Facades\Route;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -177,6 +178,12 @@ Route::get('/list/colleges/{countryId}/{name?}', [CollegeController::class, 'lis
 Route::get('/colleges/{id}/brochure', [CollegeController::class, 'downloadBrochure'])->name('college.brochure');
 
 
+
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
+    Route::post('/settings/profile', [SettingsController::class, 'updateProfile'])->name('settings.profile.update');
+    Route::post('/settings/password', [SettingsController::class, 'changePassword'])->name('settings.password.change');
+});
 
 Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('/blog', [AdminBlogController::class, 'index'])->name('admin.blog.index');

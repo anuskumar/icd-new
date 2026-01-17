@@ -70,7 +70,7 @@
                                 <p class="small m-0">NIRF '24</p>
                             </div>
                             <div class="me-4">
-                                <img src="{{ asset('storage/app/public/' . $college->image) }}" class="college-logo"
+                                <img src="{{ asset('storage/' . $college->image) }}" class="college-logo"
                                     alt="College Logo"
                                     style="height: 90px; width: 120px; object-fit: cover; border-radius: 4px;">
                             </div>
@@ -193,7 +193,7 @@
 
                     response.colleges.forEach(college => {
                         // Ensure the image path is correct
-                        const imageUrl = `{{ asset('storage/app/public/${college.image}') }}`;
+                        const imageUrl = `{{ asset('storage') }}/${college.image}`;
                         const brochureUrl = `/colleges/${college.id}/brochure`;
 
                         // Append each college to the college list

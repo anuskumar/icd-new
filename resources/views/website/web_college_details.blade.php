@@ -12,7 +12,7 @@
                             <div class="single-item-carousel owl-carousel owl-theme ">
                                 <figure class="image" style="height: unset!important;">
                                     <img style="height: 300px!important;border-radius:5px;"
-                                        src="{{ asset('storage/app/public/' . $college->banner_image) }}" alt="">
+                                        src="{{ asset('storage/' . $college->banner_image) }}" alt="">
                                 </figure>
                             </div>
                         </div>
@@ -23,7 +23,7 @@
                                     <li>
                                         <div class="author">
                                             <div class="thumb">
-                                                <img src="{{ asset('storage/app/public/' . $college->image) }}" alt="image">
+                                                <img src="{{ asset('storage/' . $college->image) }}" alt="image">
                                             </div>
 
                                             <div class="text">

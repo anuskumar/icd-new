@@ -57,6 +57,10 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
+                            <div class="form-group" style="display: none;">
+                                <label>Image Preview</label>
+                                <img id="featured-image-preview" src="" alt="Featured image preview" width="200">
+                            </div>
                         </div>
                         <div class="col-lg-12">
                             <button type="submit" class="btn btn-primary">Submit</button>
@@ -75,6 +79,28 @@
 <script src="https://cdn.ckeditor.com/4.25.1-lts/standard/ckeditor.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        const fileInput = document.getElementById('featured_image');
+        const previewImage = document.getElementById('featured-image-preview');
+
+        if (fileInput && previewImage) {
+            fileInput.addEventListener('change', function() {
+                const file = this.files && this.files[0];
+                if (!file) {
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImage.src = e.target.result;
+                    const wrapper = previewImage.closest('.form-group');
+                    if (wrapper) {
+                        wrapper.style.display = '';
+                    }
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
         // Check if CKEDITOR is defined
         if (typeof CKEDITOR !== 'undefined') {
             CKEDITOR.replace('blog_content', {

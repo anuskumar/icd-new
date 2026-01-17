@@ -142,8 +142,13 @@
             <a href="javascript:void(0);" class="dropdown-toggle nav-link userset" data-bs-toggle="dropdown">
                 <span class="user-info">
                     <span class="user-letter">
-                        <img src="{{ asset('admin_assets/assets/img/profiles/avator1.jpg') }}" alt=""
-                            class="img-fluid">
+                        @if(Auth::check() && Auth::user()->image)
+                            <img src="{{ asset('storage/' . Auth::user()->image) }}" alt="{{ Auth::user()->name }}"
+                                class="img-fluid">
+                        @else
+                            <img src="{{ asset('admin_assets/assets/img/profiles/avator1.jpg') }}" alt=""
+                                class="img-fluid">
+                        @endif
                     </span>
                     {{-- <span class="user-detail">
                         <span class="user-name">John Smilga</span>
@@ -161,7 +166,11 @@
                 <div class="profilename">
                     <div class="profileset">
                         <span class="user-img">
-                            <img src="{{ asset('admin_assets/assets/img/profiles/avator1.jpg') }}" alt="">
+                            @if(Auth::check() && Auth::user()->image)
+                                <img src="{{ asset('storage/' . Auth::user()->image) }}" alt="{{ Auth::user()->name }}">
+                            @else
+                                <img src="{{ asset('admin_assets/assets/img/profiles/avator1.jpg') }}" alt="">
+                            @endif
                             <span class="status online"></span>
                         </span>
                         <div class="profilesets">
@@ -183,7 +192,7 @@
                     @else
 
                     @endif
-                    <a class="dropdown-item" href="#">
+                    <a class="dropdown-item" href="{{ url('/settings') }}" onclick="event.stopPropagation(); window.location.href='{{ url('/settings') }}';">
                         <i class="me-2" data-feather="settings"></i>Settings
                     </a>
                     <hr class="m-0">
@@ -204,7 +213,7 @@
             aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
         <div class="dropdown-menu dropdown-menu-right">
             <a class="dropdown-item" href="profile.html">My Profile</a>
-            <a class="dropdown-item" href="generalsettings.html">Settings</a>
+            <a class="dropdown-item" href="{{ url('/settings') }}" onclick="event.stopPropagation(); window.location.href='{{ url('/settings') }}';">Settings</a>
             <a class="dropdown-item" href="{{ route('logout') }}">Logout</a>
         </div>
     </div>

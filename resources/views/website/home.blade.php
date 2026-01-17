@@ -1186,6 +1186,109 @@
 
 
         <!-- blog-area -->
+        <style>
+            #blog .team-active .class-item {
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+
+            #blog .team-active .class-content {
+                text-align: center;
+                padding: 15px;
+            }
+
+            #blog .team-active .blog-thumb {
+                width: 100%;
+                margin-bottom: 16px;
+            }
+
+            #blog .team-active .blog-thumb img {
+                width: 100%;
+                height: 200px;
+                object-fit: cover;
+                border-radius: 8px;
+                visibility: visible !important;
+                display: block !important;
+            }
+
+            #blog .team-active .class-content .title {
+                color: #0E4389;
+                margin-bottom: 10px;
+                min-height: 56px;
+                line-height: 1.3;
+            }
+
+            #blog .team-active .class-content p {
+                margin-bottom: 10px;
+            }
+
+            /* Blog slider arrows styling */
+            #blog .team-active .slick-prev,
+            #blog .team-active .slick-next {
+                z-index: 10;
+                width: 45px;
+                height: 45px;
+                background: #0E4389;
+                border-radius: 50%;
+                display: flex !important;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                border: 2px solid white;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            }
+
+            #blog .team-active .slick-prev:hover,
+            #blog .team-active .slick-next:hover {
+                background: #0c3e68;
+                transform: scale(1.1);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+            }
+
+            #blog .team-active .slick-prev {
+                left: -25px;
+            }
+
+            #blog .team-active .slick-next {
+                right: -25px;
+            }
+
+            #blog .team-active .slick-prev i,
+            #blog .team-active .slick-next i {
+                font-size: 20px;
+                color: white;
+            }
+
+            #blog .team-active .slick-prev:before,
+            #blog .team-active .slick-next:before {
+                display: none;
+            }
+
+            @media (max-width: 1200px) {
+                #blog .team-active .slick-prev {
+                    left: 10px;
+                }
+
+                #blog .team-active .slick-next {
+                    right: 10px;
+                }
+            }
+
+            @media (max-width: 767px) {
+                #blog .team-active .slick-prev,
+                #blog .team-active .slick-next {
+                    width: 35px;
+                    height: 35px;
+                }
+
+                #blog .team-active .slick-prev i,
+                #blog .team-active .slick-next i {
+                    font-size: 16px;
+                }
+            }
+        </style>
         <section id="blog" class="blog-area p-relative fix academy"
             style="background-image:url('{{ asset('assets/img/bg/blgbg.jpg') }}'); background-repeat: no-repeat; background-position:top;background-size: cover;">
             <div class="container">
@@ -1201,119 +1304,43 @@
                     </div>
                 </div>
 
-                <div class="date-active class-scroll">
+                <div class="team-active mar-bot class-scroll">
+                    @forelse ($blogs as $blog)
+                        <div class="class-item mb-30" style="height:550px;">
+                            <a href="{{ route('blog.show', $blog->slug) }}">
+                                <div>
+                                    @if (!empty($blog->featured_image))
+                                        <div class="blog-thumb">
+                                            <img src="{{ asset('storage/' . $blog->featured_image) }}" alt="{{ $blog->title }}" class="countriesborder" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px;">
+                                        </div>
+                                    @endif
+                                </div>
 
-
-
-                    <div class=" class-item b-para col-lg-4 col-md-6 col-sm-12">
-
-                        <div class="blog-content2">
-                            <div class="row">
-                                <div class="col-lg-6 cal">
-                                    <div class="date-home">
-                                        <i class="fal fa-calendar-alt"></i> Dec 29, 2023
+                                <div class="class-content">
+                                    <h4 class="title" style="color: #0E4389;">
+                                        {{ $blog->title }}
+                                    </h4>
+                                    <p class="overflow-auto" style="height:120px">{{ Str::limit(strip_tags($blog->content), 150) }}</p>
+                                    <div class="date-home" style="margin-top: 10px;">
+                                        <i class="fal fa-calendar-alt"></i>
+                                        {{ optional($blog->published_at)->format('M d, Y') ?? $blog->created_at->format('M d, Y') }}
+                                    </div>
+                                    <div style="margin-top: 10px; display: flex; align-items: center;">
+                                        <div class="blog-icon" style="margin-right: 10px;">
+                                            <img src="{{ asset('assets/img/testimonial/flag.png') }}" alt="img" style="width: 24px; height: 24px;">
+                                        </div>
+                                        <p style="margin: 0; font-size: 14px;">{{ $blog->author->name ?? 'ICD Education' }}</p>
                                     </div>
                                 </div>
-                            </div>
-                            <br>
-                            <h4 style="color: #0E4389">Uzbekistan - Top Choice for MBBS Abroad</h4>
-                            <p>A Smart Move for Indian Medical Aspirants</p>
-                            <hr>
-                            <div class="row">
-                                <div class="col-lg-2">
-                                    <div class=" blog-icon">
-                                        <img src="{{ asset('assets/img/testimonial/flag.png') }}" alt="img">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <p> ICD Education</p>
-                                </div>
-
-                                <!--<div class="col-lg-4">-->
-                                <!--    <div class="blog-btn"><a href="blog-details.html"><span style="color: black;">Read-->
-                                <!--                More</span> <i class="fal fa-long-arrow-right"></i></a></div>-->
-
-                                <!--</div>-->
-
+                            </a>
+                        </div>
+                    @empty
+                        <div class="class-item mb-30" style="height:550px;">
+                            <div class="class-content">
+                                <p>No blog posts found.</p>
                             </div>
                         </div>
-                    </div>
-
-
-                    <div class=" class-item b-para col-lg-4 col-md-6 col-sm-12">
-
-                        <div class="blog-content2">
-                            <div class="row">
-                                <div class="col-lg-6 cal">
-                                    <div class="date-home">
-                                        <i class="fal fa-calendar-alt"></i> Dec 29, 2023
-                                    </div>
-                                </div>
-                            </div>
-                            <br>
-                            <h4 style="color: #0E4389">Sharpening Your Clinical Skills and Diagnostic Precision</h4>
-                            <p>A Smart Move for Indian Medical Aspirants</p>
-                            <hr>
-                            <div class="row">
-                                <div class="col-lg-2">
-                                    <div class=" blog-icon">
-                                        <img src="{{ asset('assets/img/testimonial/flag.png') }}" alt="img">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <p> ICD Education</p>
-                                </div>
-
-                                <!--<div class="col-lg-4">-->
-                                <!--    <div class="blog-btn"><a href="blog-details.html"><span style="color: black;">Read-->
-                                <!--                More</span> <i class="fal fa-long-arrow-right"></i></a></div>-->
-
-                                <!--</div>-->
-
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class=" class-item b-para col-lg-4 col-md-6 col-sm-12">
-
-
-                        <div class="blog-content2">
-                            <div class="row">
-                                <div class="col-lg-6 cal">
-                                    <div class="date-home">
-                                        <i class="fal fa-calendar-alt"></i> Dec 29, 2023
-                                    </div>
-                                </div>
-                            </div>
-                            <br>
-                            <h4 style="color: #0E4389">Crack NEET 2025 with Confidence and Clarity</h4>
-                            <p>Ultimate Guide for Aspiring Doctors</p>
-                            <hr>
-                            <div class="row">
-                                <div class="col-lg-2">
-                                    <div class=" blog-icon">
-                                        <img src="{{ asset('assets/img/testimonial/flag.png') }}" alt="img">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <p> ICD Education </p>
-                                </div>
-
-                                <!--<div class="col-lg-4">-->
-                                <!--    <div class="blog-btn"><a href="blog-details.html"><span style="color: black;">Read-->
-                                <!--                More</span> <i class="fal fa-long-arrow-right"></i></a></div>-->
-
-                                <!--</div>-->
-
-
-                            </div>
-                        </div>
-                    </div>
-
-
-
-
+                    @endforelse
                 </div>
 
                 {{-- ////////// --}}

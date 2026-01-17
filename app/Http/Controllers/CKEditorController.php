@@ -15,7 +15,18 @@ class CKEditorController extends Controller
             $extension = $request->file('upload')->getClientOriginalExtension();
             $fileName = Str::slug($fileName) . '_' . time() . '.' . $extension;
 
-            $request->file('upload')->move(public_path('uploads/ckeditor'), $fileName);
+            $destinationPath = public_path('uploads/ckeditor');
+            if (!is_dir($destinationPath)) {
+                mkdir($destinationPath, 0755, true);
+            }
+
+            if (!$request->file('upload')->move($destinationPath, $fileName)) {
+                $message = 'Image upload failed. Please try again.';
+                $CKEditorFuncNum = $request->input('CKEditorFuncNum');
+                $response = "<script>window.parent.CKEDITOR.tools.callFunction($CKEditorFuncNum, '', '$message')</script>";
+                @header('Content-type: text/html; charset=utf-8');
+                return $response;
+            }
 
             $CKEditorFuncNum = $request->input('CKEditorFuncNum');
             $url = asset('uploads/ckeditor/' . $fileName);
@@ -25,5 +36,11 @@ class CKEditorController extends Controller
             @header('Content-type: text/html; charset=utf-8');
             return $response;
         }
+
+        $message = 'No image selected for upload.';
+        $CKEditorFuncNum = $request->input('CKEditorFuncNum');
+        $response = "<script>window.parent.CKEDITOR.tools.callFunction($CKEditorFuncNum, '', '$message')</script>";
+        @header('Content-type: text/html; charset=utf-8');
+        return $response;
     }
 }

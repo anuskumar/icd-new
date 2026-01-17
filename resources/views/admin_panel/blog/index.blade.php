@@ -27,6 +27,7 @@
                             <tr>
                                 <th>Title</th>
                                 <th>Author</th>
+                                <th>Image</th>
                                 <th>Published</th>
                                 <th>Created At</th>
                                 <th>Action</th>
@@ -37,6 +38,13 @@
                                 <tr>
                                     <td>{{ $blog->title }}</td>
                                     <td>{{ $blog->author->name }}</td>
+                                    <td>
+                                        @if ($blog->featured_image)
+                                            <img src="{{ asset('storage/' . $blog->featured_image) }}" alt="{{ $blog->title }}" style="width: 80px; height: 60px; object-fit: cover; border-radius: 4px;">
+                                        @else
+                                            <span class="text-muted">No image</span>
+                                        @endif
+                                    </td>
                                     <td>{{ $blog->is_published ? 'Yes' : 'No' }}</td>
                                     <td>{{ $blog->created_at->format('Y-m-d') }}</td>
                                     <td>
