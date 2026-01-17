@@ -32,9 +32,11 @@
                 <div class="row">
                         @forelse ($blogs as $blog)
                             <div class="bs-blog-post mb-40">
-                                <div class="bs-blog-thumb">
-                                    <img src="{{ asset('storage/' . $blog->featured_image) }}" alt="{{ $blog->title }}" style="height: 400px; width: 100%; object-fit: cover;">
-                                </div>
+                                @if (!empty($blog->featured_image))
+                                    <div class="bs-blog-thumb">
+                                        <img src="{{ asset('storage/' . $blog->featured_image) }}" alt="{{ $blog->title }}" style="height: 400px; width: 100%; object-fit: cover;">
+                                    </div>
+                                @endif
                                 <div class="bs-blog-content">
                                     <div class="blog-meta">
                                         <ul>
