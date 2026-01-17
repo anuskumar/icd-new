@@ -44,6 +44,32 @@
 
 
 <style>
+    /* Top navbar refresh */
+    .menu-area {
+        background: #ffffff;
+        border-bottom: 1px solid #e5e7eb;
+        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+    }
+
+    .second-menu {
+        padding: 8px 0;
+    }
+
+    .header-top .header-social span {
+        color: #334155;
+        font-size: 14px;
+        letter-spacing: 0.2px;
+    }
+
+    .header-top .header-cta a img {
+        filter: saturate(0.95);
+        transition: transform 0.2s ease;
+    }
+
+    .header-top .header-cta a:hover img {
+        transform: translateY(-1px);
+    }
+
     .main-menu ul {
         list-style: none;
         padding: 0;
@@ -60,15 +86,21 @@
 
     .main-menu ul li a {
         text-decoration: none;
-        color: #333;
-        padding: 10px 10px;
+        color: #1f2937;
+        padding: 12px 14px;
         display: block;
         font-family: 'Arial', sans-serif;
-        transition: background-color 0.3s ease;
+        font-weight: 600;
+        font-size: 14px;
+        letter-spacing: 0.2px;
+        border-radius: 6px;
+        transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
     }
 
     .main-menu ul li:hover>a {
-        background-color: #f2f2f2;
+        background-color: #f5f7fb;
+        color: #0f4c81;
+        transform: translateY(-1px);
     }
 
     .mega-menu .dropdown-content {
@@ -77,12 +109,14 @@
         top: 100%;
         left: 0;
         background-color: #fff;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12);
         z-index: 1000;
         width: 650px;
         max-height: auto;
         flex-direction: row;
-        border: none;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 14px 12px;
     }
 
     .mega-menu .dropdown-content a {
@@ -100,13 +134,14 @@
     }
 
     .mega-menu .column-left {
-        width: 50%;
+        width: 40%;
     }
 
     .mega-menu .column-right {
-        background: #f2f2f2;
+        background: #f8fafc;
         width: 100%;
         padding-left: 10px;
+        border-left: 1px solid #e5e7eb;
     }
 
     /* Country links */
@@ -128,7 +163,7 @@
     }
 
     .mega-menu .column-left ul li a {
-        color: #333;
+        color: #1f2937;
         text-decoration: none;
         transition: color 0.3s ease;
         padding: 10px;
@@ -140,7 +175,7 @@
     }
 
     .mega-menu .column-left ul li a:hover {
-        color: #007bff;
+        color: #0f4c81;
     }
 
     /* Course lists initially hidden */
@@ -160,9 +195,31 @@
     }
 
     .mega-menu .column-right .course-list ul li a {
-        color: #333;
+        color: #1f2937;
         text-decoration: none;
         border: none;
+    }
+
+    .mega-menu .column-right .course-list ul li a:hover {
+        color: #0f4c81;
+    }
+
+    .second-header-btn .btn {
+        background: #0f4c81;
+        color: #ffffff;
+        border-radius: 999px;
+        padding: 10px 18px;
+        font-weight: 600;
+        font-size: 12px;
+        letter-spacing: 0.4px;
+        border: none;
+        box-shadow: 0 10px 20px rgba(15, 76, 129, 0.2);
+    }
+
+    .second-header-btn .btn:hover {
+        background: #0c3e68;
+        color: #ffffff;
+        transform: translateY(-1px);
     }
 
     /* Responsive styles */
