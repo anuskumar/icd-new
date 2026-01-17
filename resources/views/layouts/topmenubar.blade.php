@@ -55,6 +55,16 @@
         padding: 8px 0;
     }
 
+    .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex: 0 0 auto;
+    }
+    .header-user {
+        white-space: nowrap;
+    }
+
     .header-top .header-social span {
         color: #334155;
         font-size: 14px;
@@ -80,7 +90,7 @@
     .main-menu ul li {
         position: relative;
         display: inline-block;
-        margin-right: 20px;
+        margin-right: 10px;
         border: none;
     }
 
@@ -384,15 +394,15 @@
     <div id="header-sticky" class="menu-area">
         <div class="container">
             <div class="second-menu">
-                <div class="row align-items-center d-flex">
-                    <div class="col-lg-3">
+                <div class="row align-items-center">
+                    <div class="col-auto">
                         <div class="logo">
                             <a href="{{ route('home') }}"><img style="max-width:100%; height:auto;"
                                     src="{{ asset('assets/img/logo/logo.webp') }}" alt="logo"></a>
                         </div>
                     </div>
 
-                    <div class="col-lg-3">
+                    <div class="col">
                         <div class="main-menu text-left text-xl-left">
                             <nav id="mobile-menu">
                                 <ul>
@@ -494,33 +504,16 @@
                         </div>
                     </div>
 
-
-                    <div class=" col-lg-1 text-right d-none d-lg-block text-right text-xl-right">
-                        <div class="login">
-                            <ul>
-                                <li>
-                                    <div class="second-header-btn">
-                                        <a href="#" class="btn tst">LANGUAGE TEST SERIES</a>
-                                    </div>
-                                </li>
-                            </ul>
+                    <div class="col-auto d-none d-lg-flex header-actions">
+                        <div class="second-header-btn">
+                            <a href="#" class="btn tst">LANGUAGE TEST SERIES</a>
+                        </div>
+                        <div class="second-header-btn">
+                            <a href="#" class="btn neet">NEET COACHING</a>
                         </div>
                     </div>
 
-                    <div class=" col-lg-2 text-right d-none d-lg-block text-right text-xl-right">
-                        <div class="login">
-                            <ul>
-                                <li>
-                                    <div class="second-header-btn">
-                                        <a href="#" class="btn neet">NEET COACHING</a>
-                                    </div>
-
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class=" col-lg-3 text-right d-none d-lg-block text-right text-xl-right">&nbsp;&nbsp;
+                    <div class="col-auto d-none d-lg-block header-user">
                         @auth
                             <div class="dropdown">
                                 <a class="dropdown-toggle" id="userDropdown" data-toggle="dropdown" aria-haspopup="true"
